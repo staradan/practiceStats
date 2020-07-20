@@ -1,0 +1,11 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.border-shadow-r{
+    border: 1px solid #333;
+    width: 100px;
+    height: 100px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.75);
+    clip-path: inset(0px -15px 0px 0px);
+}
