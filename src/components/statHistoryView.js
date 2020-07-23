@@ -11,7 +11,7 @@ function StatHistoryView() {
         'Boynton'
     ];
     return (
-        <div className="bg-gray-200 w-full text-center px-5 py-10 max-height-48 overflow-y-scroll rounded-md">
+        <div className="bg-gray-200 w-full text-center px-5 py-10 max-height-48 overflow-y-scroll rounded-sm">
             <FontAwesomeIcon icon={faSearch} className="text-gray-500" size="5x" />
             <h1>No Stats to Display</h1>
         </div>

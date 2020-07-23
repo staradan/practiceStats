@@ -13,7 +13,7 @@ function QuickRecordTable() {
     ];
     return (
 
-        <div className="max-w-full overflow-scroll rounded-md">
+        <div className="max-w-full overflow-scroll rounded-sm">
             <div className="flex items-center max-w-full">
                 <div className="w-1/3 sticky left-0 flex-none font-semibold text-sm text-gray-700 bg-gray-400 border-gray-600 border-r-2 text-left px-4 py-2">Name</div>
                 <ColumnHeader statName="Throwing" />

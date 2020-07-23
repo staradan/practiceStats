@@ -17,7 +17,6 @@ function App() {
           <Route path="/manage" component={ManageTeam} />
         </Switch>
       </Router>
-      <div className="absolute bottom-0 h-1 w-full bg-red-600"></div>
     </div>
   );
 }
