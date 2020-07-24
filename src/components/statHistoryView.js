@@ -1,19 +1,39 @@
 import React from 'react';
-import { faSearch } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import StatHistoryRow from './statHistoryRow';
 
 function StatHistoryView() {
-    // Import result is the URL of your image
-    let names = [
-        'Schwellenbach',
-        'Gillin',
-        'Rosebury',
-        'Boynton'
-    ];
     return (
-        <div className="bg-gray-200 w-full text-center px-5 py-10 max-height-48 overflow-y-scroll rounded-sm">
-            <FontAwesomeIcon icon={faSearch} className="text-gray-500" size="5x" />
-            <h1>No Stats to Display</h1>
+        <div className="border-gray-900 w-full text-center h-48 overflow-y-scroll rounded-sm">
+            <StatHistoryRow 
+                playerName="S. Schwellenbach" 
+                playerStatistic="Fielding" 
+                isPositiveStat={false}
+            />
+            <StatHistoryRow 
+                playerName="S. Schwellenbach" 
+                playerStatistic="Throwing" 
+                isPositiveStat={false}
+            />
+            <StatHistoryRow 
+                playerName="C. Chick" 
+                playerStatistic="Fielding" 
+                isPositiveStat={true}
+            />
+                        <StatHistoryRow 
+                playerName="S. Schwellenbach" 
+                playerStatistic="Fielding" 
+                isPositiveStat={false}
+            />
+            <StatHistoryRow 
+                playerName="S. Schwellenbach" 
+                playerStatistic="Throwing" 
+                isPositiveStat={false}
+            />
+            <StatHistoryRow 
+                playerName="C. Chick" 
+                playerStatistic="Fielding" 
+                isPositiveStat={true}
+            />
         </div>
     );
 }

@@ -5,13 +5,6 @@ import NavToolbar from '../components/navToolbar';
 import { Link } from 'react-router-dom';
 
 function TakeStats() {
-    // Import result is the URL of your image
-    let names = [
-        'Schwellenbach',
-        'Gillin',
-        'Rosebury',
-        'Boynton'
-    ];
     return (
         <div>
             <NavToolbar />
