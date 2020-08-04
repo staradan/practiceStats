@@ -2,7 +2,8 @@ import React from 'react';
 import NavToolbar from '../components/navToolbar';
 import FavoriteStatCard from '../components/favoriteStatCard';
 import AggregateStatCard from '../components/aggregateStatCard';
-
+import NamedProgressBar from '../components/aggregateCardViz/namedProgressBar';
+import NumberComparison from '../components/aggregateCardViz/numberComparison';
 
 function ViewInsights() {
     // Import result is the URL of your image
@@ -14,7 +15,16 @@ function ViewInsights() {
                 <FavoriteStatCard statName="Throwing" />
                 <FavoriteStatCard statName="Fielding" />
                 <h1 className="font-semibold mt-4">Team Aggregates</h1>
-                <AggregateStatCard statName="Competitive" />
+                <AggregateStatCard 
+                    statName="Competitive" 
+                    message="Jaxon Hallmark had the best throwing percentage today"
+                    visualization={<NamedProgressBar/>}
+                />
+                <AggregateStatCard 
+                    statName="Competitive"
+                    message="Drew Gillin had the most throwing reps today" 
+                    visualization={<NumberComparison />}
+                />
             </div>
         </div>
     );
