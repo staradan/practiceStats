@@ -8,16 +8,12 @@ function TakeStats() {
     return (
         <div>
             <NavToolbar />
-            <div className="px-4">
+            <div className="px-4 max-h-screen">
                 <div class="flex">
                     <div class="w-full mr-2 sm:w-1/2">
                         <h1 className="font-medium">History</h1>
                         <StatHistoryView />
                     </div>
-                    <Link to="/view" className="w-1/2 ml-2 hidden sm:block text-left">
-                        <h1 className="font-medium">Quick Insights</h1>
-                        <StatHistoryView />
-                    </Link>
                 </div>
                 <h1 className="font-medium pt-6">Quick Record</h1>
                 <QuickRecordTable />

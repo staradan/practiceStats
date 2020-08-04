@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 
 function HomeToolbar() {
     return (
-        <div className="mb-3 w-screen px-4 py-3 flex items-center justify-between">
+        <div className="w-screen px-4 py-3 flex items-center justify-between">
             <Link to="/"><FontAwesomeIcon icon={faArrowLeft} size="2x" /></Link>
             <img src={logo} alt="Logo" className="w-12" />
         </div>

@@ -25,6 +25,8 @@ function QuickRecordTable() {
                 <PlayerRow name="Schwellenbach" />
                 <PlayerRow name="Gillin" darkGray="true" />
                 <PlayerRow name="Stara" />
+                <PlayerRow name="Gillin" darkGray="true" />
+                <PlayerRow name="Stara" />
             </div>
         </div>
     );
