@@ -4,7 +4,7 @@ import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from 'react-router-dom';
 
-function HomeToolbar() {
+function NavToolbar() {
     return (
         <div className="w-screen px-4 py-3 flex items-center justify-between">
             <Link to="/"><FontAwesomeIcon icon={faArrowLeft} size="2x" /></Link>
@@ -12,4 +12,4 @@ function HomeToolbar() {
         </div>
     );
 }
-export default HomeToolbar;
+export default NavToolbar;
