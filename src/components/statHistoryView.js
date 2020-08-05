@@ -2,6 +2,7 @@ import React from 'react';
 import StatHistoryRow from './statHistoryRow';
 
 function StatHistoryView() {
+    //TODO need to have the stats object here...
     return (
         <div className="border-gray-900 w-full text-center h-48 overflow-y-scroll rounded-sm">
             <StatHistoryRow 
