@@ -1,7 +1,7 @@
 import React from 'react';
 import HomeToolbar from '../components/homeToolbar';
 import QuickViewPlayerCard from '../components/quickViewPlayerCard';
-import { Link } from 'react-router-dom';
+import Footer from '../components/footer'
 
 
 function Home() {
@@ -10,15 +10,10 @@ function Home() {
             <div className="absolute top-0">
                 <HomeToolbar />
             </div>
-            <div className="text-center mt-32 border-b pb-4">
-                <Link to="/take"><button className="block m-auto my-3 bg-gray-300 w-3/5 py-4 font-medium">Take Stats</button></Link>
-                <Link to="/view"><button className="block m-auto my-3 bg-gray-300 w-3/5 py-4 font-medium">View Insights</button></Link>
-                <Link to="/manage"><button className="block m-auto my-3 bg-gray-300 w-3/5 py-4 font-medium">Manage Team</button></Link>
-            </div>
-            <div className="mx-4 mt-6">
-                <h1 className="font-bold">Leaderboard  <span className="text-gray-600 text-sm font-normal">4/13/20</span></h1>
+            <div className="mx-4 mt-24">
+                <h1 className="font-bold">Efficiency Leaderboard  <span className="text-gray-600 text-sm font-normal">4/13/20</span></h1>
                 <div className="my-3">
-                    <button className="mr-4 bg-red-500 rounded py-1 px-2 text-sm">Overall</button>
+                    <button className="mr-4 bg-gray-300 rounded py-1 px-2 text-sm">Overall</button>
                     <button className="mr-4 rounded py-1 px-2 text-sm">Fielding</button>
                     <button className="mr-4 rounded py-1 px-2 text-sm">Throwing</button>
                 </div>
@@ -33,7 +28,12 @@ function Home() {
                     <QuickViewPlayerCard rank="4" name="Lou Gehrig" percent="88" positive="130" negative="30"/>
                 </div>
             </div>
+            <div className="mx-4 mt-6">
+                <h1 className="font-bold">Team Efficiency <span className="text-gray-600 text-sm font-normal">4/13/20</span></h1>
+            </div>
+            <Footer />
         </div>
+
     );
 }
 
