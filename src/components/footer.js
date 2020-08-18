@@ -10,7 +10,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 function Footer() {
     return (
         <div className="w-full h-16">
-            <section id="bottom-navigation" className="md:hidden block fixed inset-x-0 bottom-0 z-10 bg-white shadow">
+            <section id="bottom-navigation" className="xl:hidden block fixed inset-x-0 bottom-0 z-10 bg-white shadow">
                 <div id="tabs" className="flex justify-between">
                     <Link to="/" className="w-full focus:text-red-500 hover:text-red-500 justify-center inline-block text-center pt-2 pb-1">
                         <div className="inline-block mb-1">

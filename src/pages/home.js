@@ -1,40 +1,53 @@
 import React from 'react';
 import HomeToolbar from '../components/homeToolbar';
-import QuickViewPlayerCard from '../components/quickViewPlayerCard';
 import Footer from '../components/footer'
+import TopPercentageCard from '../components/topPercentageCard';
+import StatList from '../components/statList';
+import { connect } from 'react-redux';
+
+const mapStateToProps = state => {
+    return {
+        players: state.players,
+        stats: state.stats,
+        statCategories: state.statCategories,
+    }
+}
 
 
-function Home() {
+const Home = ({ stats, players, statCategories }) => {
     return (
         <div>
             <div className="absolute top-0">
                 <HomeToolbar />
             </div>
-            <div className="mx-4 mt-24">
-                <h1 className="font-bold">Efficiency Leaderboard  <span className="text-gray-600 text-sm font-normal">4/13/20</span></h1>
-                <div className="my-3">
-                    <button className="mr-4 bg-gray-300 rounded py-1 px-2 text-sm">Overall</button>
-                    <button className="mr-4 rounded py-1 px-2 text-sm">Fielding</button>
-                    <button className="mr-4 rounded py-1 px-2 text-sm">Throwing</button>
+            <div className="mx-4">
+                <div className="mt-24">
+                    <h1 className="font-bold">Team <span className="text-gray-600 text-sm font-normal">4/13/20</span></h1>
+                    <div className="overflow-x-auto flex">
+                        {statCategories.map((x, index) => (
+                            <TopPercentageCard key={index} statName={x} percentage={93} change={4} />
+                        ))}
+                    </div>
                 </div>
-                <div className="mt-2 overflow-y-auto">
-                    <QuickViewPlayerCard rank="1" name="Spencer Schwellenbach" percent="94" positive="123" negative="8"/>
-                    <QuickViewPlayerCard rank="2" name="Dan The Man" percent="93" positive="110" negative="9"/>
-                    <QuickViewPlayerCard rank="3" name="Jaxon Hallmark" percent="90" positive="106" negative="11"/>
-                    <QuickViewPlayerCard rank="4" name="Lou Gehrig" percent="88" positive="130" negative="30"/>
-                    <QuickViewPlayerCard rank="1" name="Spencer Schwellenbach" percent="94" positive="123" negative="8"/>
-                    <QuickViewPlayerCard rank="2" name="Dan The Man" percent="93" positive="110" negative="9"/>
-                    <QuickViewPlayerCard rank="3" name="Jaxon Hallmark" percent="90" positive="106" negative="11"/>
-                    <QuickViewPlayerCard rank="4" name="Lou Gehrig" percent="88" positive="130" negative="30"/>
+                <h1 className="font-bold mt-6 mb-2">Efficiency  <span className="text-gray-600 text-sm font-normal">4/13/20</span></h1>
+                <div className="flex overflow-x-auto">
+                    {statCategories.map((statName, index) => (
+                        <StatList statName={statName} players={players} key={index} type="percent" />
+                    ))}
                 </div>
+                <h1 className="font-bold mt-6 mb-2">Reps  <span className="text-gray-600 text-sm font-normal">4/13/20</span></h1>
+                <div className="flex overflow-x-auto">
+                    {statCategories.map((statName, index) => (
+                        <StatList statName={statName} players={players} key={index} type="reps" />
+                    ))}
+                </div>
+                <Footer />
             </div>
-            <div className="mx-4 mt-6">
-                <h1 className="font-bold">Team Efficiency <span className="text-gray-600 text-sm font-normal">4/13/20</span></h1>
-            </div>
-            <Footer />
         </div>
 
     );
 }
 
-export default Home;
+const AllHome = connect(mapStateToProps)(Home);
+
+export default AllHome;

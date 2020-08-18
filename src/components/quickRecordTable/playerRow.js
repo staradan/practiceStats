@@ -1,17 +1,31 @@
 import React from 'react';
 import PlusMinusBox from './plusMinusBox';
+import { connect } from 'react-redux';
 
+const mapStateToProps = state => {
+    return {
+        players: state.players,
+        stats: state.stats,
+        statCategories: state.statCategories,
+    }
+}
 
-function PlayerRow(props) {
-    let rowBackgroundColor = props.darkGray ? 'bg-gray-200' : 'bg-white';
+const PlayerRow = ({ stats, statCategories, name, darkGray }) => {
+    let rowBackgroundColor = darkGray ? 'bg-gray-200' : 'bg-white';
     return (
         <div className="flex items-center">
-            <div className={"w-1/3 sticky left-0 flex-none border-gray-600 border-r-2 text-gray-700 text-left px-4 py-2 overflow-hidden " + rowBackgroundColor}> {props.name}</div>
-            <PlusMinusBox rowBackgroundColor={rowBackgroundColor} />
-            <PlusMinusBox rowBackgroundColor={rowBackgroundColor} />
-            <PlusMinusBox rowBackgroundColor={rowBackgroundColor} />
-            <PlusMinusBox rowBackgroundColor={rowBackgroundColor} />
+            <div className={"w-24 flex-none sticky left-0 flex-none border-gray-600 border-r-2 text-gray-700 text-left px-4 py-2 overflow-hidden flex-no-wrap " + rowBackgroundColor}>
+                <h1 className="whitespace-no-wrap">
+                    {name}
+                </h1>
+            </div>
+            {stats != null ? statCategories.map((statName, index) => (
+                <PlusMinusBox rowBackgroundColor={rowBackgroundColor} playerName={name} key={index} statName={statName} />
+            )) : <h1>Loading...</h1>}
         </div>
     );
 }
-export default PlayerRow;
+
+const Row = connect(mapStateToProps)(PlayerRow);
+
+export default Row;

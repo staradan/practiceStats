@@ -15,7 +15,7 @@ function TakeStats() {
                     </div>
                 </div>
                 <h1 className="font-medium pt-6">Quick Record</h1>
-                <QuickRecordTable />
+                <QuickRecordTable fallback={"Loading..."} />
             </div>
             <Footer />
         </div>

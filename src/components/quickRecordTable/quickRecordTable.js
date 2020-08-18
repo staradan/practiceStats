@@ -1,34 +1,34 @@
 import React from 'react';
 import PlayerRow from './playerRow';
 import ColumnHeader from './columnHeader';
+import { connect } from 'react-redux';
 
+const mapStateToProps = state => {
+    return {
+        players: state.players,
+        stats: state.stats,
+        statCategories: state.statCategories,
+    }
+}
 
-function QuickRecordTable() {
-    // Import result is the URL of your image
+const QuickRecordTable = ({ statCategories, players, stats }) => {
     return (
-
-        <div className="max-w-full overflow-scroll rounded-sm">
-            <div className="flex items-center max-w-full">
-                <div className="w-1/3 sticky left-0 flex-none font-semibold text-sm text-gray-700 bg-gray-400 border-gray-600 border-r-2 text-left px-4 py-2">Name</div>
-                <ColumnHeader statName="Throwing" />
-                <ColumnHeader statName="Fielding" />
-                <ColumnHeader statName="Diving" />
-                <ColumnHeader statName="Competitive" />
+        <div className="overflow-scroll rounded-sm">
+            <div className="flex items-center">
+                <div className="w-24 sticky left-0 flex-none font-semibold text-sm text-gray-700 bg-gray-400 border-gray-600 border-r-2 text-left px-4 py-2 big-width">Name</div>
+                {stats != null ? statCategories.map((statName, index) => (
+                    <ColumnHeader statName={statName} key={index} />
+                )) : <h1>Loading...</h1>}
             </div>
             <div>
-                <PlayerRow name="Schwellenbach" />
-                <PlayerRow name="Gillin" darkGray="true" />
-                <PlayerRow name="Schwellenbach" />
-                <PlayerRow name="Gillin" darkGray="true" />
-                <PlayerRow name="Schwellenbach" />
-                <PlayerRow name="Gillin" darkGray="true" />
-                <PlayerRow name="Schwellenbach" />
-                <PlayerRow name="Gillin" darkGray="true" />
-                <PlayerRow name="Stara" />
-                <PlayerRow name="Gillin" darkGray="true" />
-                <PlayerRow name="Stara" />
+                {players.map((player, index) => (
+                    <PlayerRow name={player} darkGray={(index % 2 === 1)} key={index} />
+                ))}
             </div>
         </div>
     );
 }
-export default QuickRecordTable;
+
+const Table = connect(mapStateToProps)(QuickRecordTable);
+
+export default Table;

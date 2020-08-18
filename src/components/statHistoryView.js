@@ -2,33 +2,31 @@ import React from 'react';
 import StatHistoryRow from './statHistoryRow';
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { connect } from "react-redux";
 
-function StatHistoryView() {
-    //TODO need to have the stats object here...
-    let stats = [
-        // {playerName: 'Spencer Schwellenbach', statName: 'Fielding', isPositiveStat: false},
-        // {playerName: 'Spencer Schwellenbach', statName: 'Fielding', isPositiveStat: false},
-        // {playerName: 'Spencer Schwellenbach', statName: 'Fielding', isPositiveStat: false},
-        // {playerName: 'Spencer Schwellenbach', statName: 'Fielding', isPositiveStat: false},
-        // {playerName: 'Spencer Schwellenbach', statName: 'Fielding', isPositiveStat: false},
-    ]
+const mapStateToProps = state => {
+    return { stats: state.stats };
+};
 
-    if(stats.length != 0){
-        return(
-            <div className="w-full text-center h-48 overflow-y-scroll rounded-sm bg-gray-200">
+function StatHistoryView({ stats }) {
+    if (stats != null) {
+        return (
+            <div className="w-full text-center h-48 overflow-y-scroll rounded-sm border">
                 {
-                    stats.map((stat) => (
-                        <StatHistoryRow 
-                            playerName={stat.playerName}
-                            playerStatistic={stat.playerStatistic} 
-                            isPositiveStat={stat.isPositiveStat}
+                    stats.slice(0).reverse().map((stat, index) => (
+                        <StatHistoryRow
+                            playerName={stat.stat.playerName}
+                            playerStatistic={stat.stat.statName}
+                            isPositiveStat={stat.stat.isPositive}
+                            key={index}
+                            statId={stat.stat.statId}
                         />
                     ))
                 }
             </div>
         );
     } else {
-        return(
+        return (
             <div className="w-full text-center h-48 overflow-y-scroll rounded-sm bg-gray-200">
                 <div className="mt-16">
                     <FontAwesomeIcon icon={faSearch} size="2x" />
@@ -38,4 +36,7 @@ function StatHistoryView() {
         );
     }
 }
-export default StatHistoryView;
+
+const View = connect(mapStateToProps)(StatHistoryView);
+
+export default View;
