@@ -42,15 +42,10 @@ const getPercent = (name, statName, stats) => {
 }
 
 const StatList = ({ stats, statName, players, type }) => {
-    const [percent, setPercent] = useState(0);
-    useEffect(() => {
-        setPercent(getPositiveStats('', 'statName', stats));
-    });
-
     return (
         <div className="mr-6 w-screen">
             <h1 className="text-gray-700">{statName}</h1>
-            <div className="mt-2 overflow-y-auto">
+            <div className="mt-2">
                 {players.map((name, index) => (
                     <QuickViewPlayerCard rank={index + 1} name={name} percent={type === "percent" ? getPercent(name, statName, stats) : getTotal(name, statName, stats)} key={index} />
                 ))}
