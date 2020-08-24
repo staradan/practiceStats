@@ -19,7 +19,7 @@ function StatHistoryView({ stats }) {
                             playerStatistic={stat.stat.statName}
                             isPositiveStat={stat.stat.isPositive}
                             key={index}
-                            statId={stat.stat.statId}
+                            statID={stat.stat.statID}
                         />
                     ))
                 }

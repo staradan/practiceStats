@@ -1,31 +1,18 @@
-import React from 'react';
+import React, { useState } from "react";
 import Footer from '../components/footer'
 import { faPencilAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import AddPlayerForm from '../components/addPlayerForm';
+import ManageTeamInfoPoint from '../components/manageTeamInfoPoint';
+import ManageTeamList from '../components/manageTeamList';
 
 
-function ManageTeam() {
-    // Import result is the URL of your image
+
+const ManageTeam = () => {
     return (
         <div className="mx-6 mt-6">
-            <div className="mb-6">
-                <h1 className="text-xl font-bold">Players</h1>
-                <div className="my-2">
-                    <div className="flex items-center justify-between mt-2">
-                        <h1>Player Name</h1>
-                        <FontAwesomeIcon icon={faPencilAlt} />
-                    </div>
-                    <div className="flex items-center justify-between mt-2">
-                        <h1>Player Name</h1>
-                        <FontAwesomeIcon icon={faPencilAlt} />
-                    </div>
-                    <div className="flex items-center justify-between mt-2">
-                        <h1>Player Name</h1>
-                        <FontAwesomeIcon icon={faPencilAlt} />
-                    </div>
-                </div>
-                <button className="text-blue-600 font-bold">+ Add New Player</button>
-            </div>
+            <ManageTeamList />
+            <AddPlayerForm />
 
             <div className="mb-6">
                 <h1 className="text-xl font-bold">Stats</h1>
@@ -38,15 +25,13 @@ function ManageTeam() {
                         <h1>Stat Name</h1>
                         <FontAwesomeIcon icon={faPencilAlt} />
                     </div>
-                    <div className="flex items-center justify-between mt-2">
-                        <h1>Stat Name</h1>
-                        <FontAwesomeIcon icon={faPencilAlt} />
-                    </div>
+                    <ManageTeamInfoPoint name="poop" />
                 </div>
                 <button className="text-blue-600 font-bold">+ Add New Stat</button>
             </div>
             <Footer />
-        </div> 
+        </div>
     );
 }
+
 export default ManageTeam;

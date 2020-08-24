@@ -4,6 +4,8 @@ import { faMinus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { addStat } from '../../js/actions/index';
 import { connect } from 'react-redux';
+import axios from 'axios';
+
 
 function mapDispatchToProps(dispatch) {
     return {
@@ -11,15 +13,23 @@ function mapDispatchToProps(dispatch) {
     };
 }
 
-const addNewStat = (playerName, statName, isPositive, addStat) => {
+const addNewStat = (name, statName, isPositive, addStat) => {
+    console.log('name', parseInt(new Date().getUTCMilliseconds()), typeof parseInt(new Date().getUTCMilliseconds()));
+
     const stat = {
-        playerName: playerName,
         statName: statName,
         isPositive: isPositive,
-        time: '',
-        statId: new Date().getUTCMilliseconds(),
+        playerName: name,
+        statID: parseInt(new Date().getUTCMilliseconds()),
     }
-    addStat({ stat });
+    //do a post with axios
+    axios.post('http://localhost:3000/stats/add', stat)
+        .then(function (response) {
+            addStat({ stat });
+            console.log(response);
+        }).catch(() => {
+            console.log('uh oh!');
+        })
 }
 
 const PlusMinusBox = ({ playerName, statName, rowBackgroundColor, addStat }) => {

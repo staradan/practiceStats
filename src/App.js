@@ -5,15 +5,44 @@ import TakeStats from './pages/takeStats';
 import ViewInsights from './pages/viewInsights';
 import ManageTeam from './pages/manageTeam';
 import Home from './pages/home';
+import { addStat, addPlayer } from './js/actions/index';
+import { connect } from 'react-redux';
 
+function mapDispatchToProps(dispatch) {
+  return {
+    addStat: stat => dispatch(addStat(stat)),
+    addPlayer: player => dispatch(addPlayer(player))
+  };
+}
 
-const App = function () {
+const App = function ({ addStat, addPlayer }) {
   useEffect(() => {
+    console.log('here');
+    //get the players
+    //get the stats
+    //get the stat categories
     axios
-      .get("http://localhost:5000/stats")
-      .then((stats) => console.log(stats))
+      .get('http://104.248.232.231/stats')
+      .then((stats) => {
+        stats.data.map((stat) => {
+          addStat({ stat });
+        });
+      })
       .catch((err) => console.log(err));
-  }, []);
+
+
+    axios
+      .get('http://104.248.232.231/players')
+      .then((players) => {
+        players.data.map((player) => {
+          console.log(player);
+          addPlayer({ player });
+        })
+      })
+      .catch((err) => console.log(err));
+
+
+  }, [addStat, addPlayer]);
   return (
     <div>
       <Router>
@@ -28,4 +57,10 @@ const App = function () {
   );
 }
 
-export default App;
+
+const WholeApp = connect(
+  null,
+  mapDispatchToProps
+)(App);
+
+export default WholeApp;

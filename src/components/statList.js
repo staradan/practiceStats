@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import QuickViewPlayerCard from '../components/quickViewPlayerCard';
 import { connect } from 'react-redux';
 
@@ -41,15 +41,15 @@ const getPercent = (name, statName, stats) => {
     return (isNaN(percent) ? '-%' : (percent + '%'))
 }
 
-const StatList = ({ stats, statName, players, type }) => {
+const StatList = (props) => {
     return (
         <div className="mr-6 w-screen">
-            <h1 className="text-gray-700">{statName}</h1>
-            <div className="mt-2">
-                {players.map((name, index) => (
+            <h1 className="text-gray-700">{props.statName}</h1>
+            {/* <div className="mt-2">
+                {props.players.map((name, index) => (
                     <QuickViewPlayerCard rank={index + 1} name={name} percent={type === "percent" ? getPercent(name, statName, stats) : getTotal(name, statName, stats)} key={index} />
                 ))}
-            </div>
+            </div> */}
         </div>
     );
 }

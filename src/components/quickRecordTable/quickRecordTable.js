@@ -22,7 +22,7 @@ const QuickRecordTable = ({ statCategories, players, stats }) => {
             </div>
             <div>
                 {players.map((player, index) => (
-                    <PlayerRow name={player} darkGray={(index % 2 === 1)} key={index} />
+                    <PlayerRow name={player.player.name} darkGray={(index % 2 === 1)} key={index} />
                 ))}
             </div>
         </div>

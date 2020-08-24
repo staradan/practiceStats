@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUndo } from "@fortawesome/free-solid-svg-icons";
 import { connect } from 'react-redux';
 import { deleteStat } from '../js/actions/index';
+import axios from 'axios';
 
 function mapDispatchToProps(dispatch) {
     return {
@@ -10,7 +11,15 @@ function mapDispatchToProps(dispatch) {
     };
 }
 
-const StatHistoryRow = ({ isPositiveStat, statId, playerName, playerStatistic, deleteStat }) => {
+function deleteStatFromDatabase(statID) {
+    //do the axios delete
+    console.log('got here');
+    axios.delete('http://localhost:3000/stats/' + statID)
+        .then(response => { console.log(response.data) })
+        .catch(response => { console.log('error', response) });
+}
+
+const StatHistoryRow = ({ isPositiveStat, statID, playerName, playerStatistic, deleteStat }) => {
     let statTextColor = isPositiveStat ? 'text-blue-400' : 'text-red-400';
     let statDecorator = isPositiveStat ? '+ ' : '- ';
     return (
@@ -20,7 +29,10 @@ const StatHistoryRow = ({ isPositiveStat, statId, playerName, playerStatistic, d
             <button className="w-1/5 rounded-sm text-center">
                 <FontAwesomeIcon
                     icon={faUndo}
-                    onClick={() => { deleteStat(statId); }}
+                    onClick={() => {
+                        deleteStat(statID);
+                        deleteStatFromDatabase(statID);
+                    }}
                 />
             </button>
         </div>
