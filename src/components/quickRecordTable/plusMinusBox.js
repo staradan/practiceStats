@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { addStat } from '../../js/actions/index';
 import { connect } from 'react-redux';
 import axios from 'axios';
-
+import firebase from 'firebase';
 
 function mapDispatchToProps(dispatch) {
     return {
@@ -14,35 +14,51 @@ function mapDispatchToProps(dispatch) {
 }
 
 const addNewStat = (name, statName, isPositive, addStat) => {
-    console.log('name', parseInt(new Date().getUTCMilliseconds()), typeof parseInt(new Date().getUTCMilliseconds()));
-
+    const db = firebase.firestore();
     const stat = {
         statName: statName,
         isPositive: isPositive,
         playerName: name,
-        statID: parseInt(new Date().getUTCMilliseconds()),
+        createdAt: firebase.firestore.Timestamp.fromDate(new Date()),
+        statID: Math.random() * 1000,
     }
-    //do a post with axios
-    axios.post('http://localhost:3000/stats/add', stat)
-        .then(function (response) {
+
+    db.collection('stats').add(stat)
+        .then(function (docRef) {
+            //add the docRef.id ot the stat and delete it by that if possible...
+            console.log(docRef);
+            stat.documentID = docRef.id;
             addStat({ stat });
-            console.log(response);
-        }).catch(() => {
-            console.log('uh oh!');
         })
+        .catch(function (error) {
+            alert('Error. Stat was not saved');
+            console.error("Error adding document: ", error);
+        });
 }
 
 const PlusMinusBox = ({ playerName, statName, rowBackgroundColor, addStat }) => {
-    return (
-        <div className={"w-16 flex-none text-gray-700 border-gray-500 border-r text-center py-2 " + rowBackgroundColor}>
-            <button className="inline w-4/12 flex-none" onClick={() => { addNewStat(playerName, statName, true, addStat) }}>
-                <FontAwesomeIcon icon={faPlus} className="text-blue-500" />
-            </button>
-            <button className="inline w-4/12 flex-none" onClick={() => { addNewStat(playerName, statName, false, addStat) }}>
-                <FontAwesomeIcon icon={faMinus} className="text-red-500" />
-            </button>
-        </div>
-    );
+    const minusColor = (statName === 'Competitive' || statName === 'Diving') ? 'text-orange-400' : 'text-red-500';
+
+    if (statName != 'Ball On Ground') {
+        return (
+            <div className={"w-1/4 flex-none text-gray-700 border-gray-500 border-r text-center " + rowBackgroundColor}>
+                <button className="inline w-6/12 flex-none px-2 py-4 border-r" onClick={() => { addNewStat(playerName, statName, true, addStat) }}>
+                    <FontAwesomeIcon icon={faPlus} className={"text-blue-500"} />
+                </button>
+                <button className="inline w-6/12 flex-none px-2 py-4" onClick={() => { addNewStat(playerName, statName, false, addStat) }}>
+                    <FontAwesomeIcon icon={faMinus} className={minusColor} />
+                </button>
+            </div>
+        );
+    } else {
+        return (
+            <div className={"w-1/4 flex-none text-gray-700 border-gray-500 border-r text-center " + rowBackgroundColor}>
+                <button className="inline w-full flex-none py-4" onClick={() => { addNewStat(playerName, statName, false, addStat) }}>
+                    <FontAwesomeIcon icon={faPlus} className={"text-orange-400"} />
+                </button>
+            </div>
+        );
+    }
 }
 
 const AddStatBox = connect(

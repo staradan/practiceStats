@@ -10,17 +10,17 @@ const mapStateToProps = state => {
     }
 }
 
-const PlayerRow = ({ stats, statCategories, name, darkGray }) => {
+const PlayerRow = ({ stats, statCategories, playerName, darkGray }) => {
     let rowBackgroundColor = darkGray ? 'bg-gray-200' : 'bg-white';
     return (
         <div className="flex items-center">
-            <div className={"w-24 flex-none sticky left-0 flex-none border-gray-600 border-r-2 text-gray-700 text-left px-4 py-2 overflow-hidden flex-no-wrap " + rowBackgroundColor}>
+            <div className={"w-1/4 flex-none fixed ml-4 left-0 flex-none border-gray-600 border-r-2 text-gray-700 text-left px-4 py-4 overflow-hidden flex-no-wrap " + rowBackgroundColor}>
                 <h1 className="whitespace-no-wrap">
-                    {name}
+                    {playerName}
                 </h1>
             </div>
             {stats != null ? statCategories.map((statName, index) => (
-                <PlusMinusBox rowBackgroundColor={rowBackgroundColor} playerName={name} key={index} statName={statName} />
+                <PlusMinusBox rowBackgroundColor={rowBackgroundColor} playerName={playerName} key={index} statName={statName} />
             )) : <h1>Loading...</h1>}
         </div>
     );

@@ -12,16 +12,14 @@ const ManageTeamListView = ({ players }) => {
     if (players != null) {
         return (
             <div>
-                <h1 className="text-xl font-bold">Players</h1>
                 {players.map((player, index) => (
-                    <ManageTeamInfoPoint name={player.player.name} key={index} />
+                    <ManageTeamInfoPoint name={player.player.playerName} playerID={player.player.playerID} key={index} />
                 ))}
             </div>
         );
     } else {
         return (
             <div>
-                <h1 className="text-xl font-bold">Players</h1>
                 <div>No Players! Add a player to get started</div>
             </div>
         )

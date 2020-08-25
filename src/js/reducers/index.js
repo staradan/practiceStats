@@ -1,4 +1,4 @@
-import { ADD_ARTICLE, ADD_STAT, DELETE_STAT, ADD_PLAYER } from '../constants/action-types';
+import { ADD_ARTICLE, ADD_STAT, DELETE_STAT, ADD_PLAYER, DELETE_PLAYER } from '../constants/action-types';
 const initialState = { //will have to get this from database somewhere
     teamName: 'Nebraska',
     players: [
@@ -18,6 +18,7 @@ const initialState = { //will have to get this from database somewhere
         'Competitive',
         'Catching',
         'Hustle',
+        'Ball On Ground',
     ],
     stats: [],
     articles: [],
@@ -41,6 +42,12 @@ function rootReducer(state = initialState, action) {
     } else if (action.type === ADD_PLAYER) {
         return Object.assign({}, state, {
             players: state.players.concat(action.payload)
+        });
+    } else if (action.type === DELETE_PLAYER) {
+        return Object.assign({}, state, {
+            players: state.players.filter(x => {
+                return parseInt(x.player.playerID) !== parseInt(action.payload)
+            })
         });
     }
     return state;

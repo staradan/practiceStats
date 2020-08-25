@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import HomeToolbar from '../components/homeToolbar';
 import Footer from '../components/footer'
-import TopPercentageCard from '../components/topPercentageCard';
-import StatList from '../components/statList';
+import WinCard from '../components/winCards/winAllTimeCard';
+import WinDayCard from '../components/winCards/winDayCard';
+import WinMonthCard from '../components/winCards/winMonthCard'
 import { connect } from 'react-redux';
 
 const mapStateToProps = state => {
@@ -13,37 +14,21 @@ const mapStateToProps = state => {
     }
 }
 
-
 const Home = ({ stats, players, statCategories }) => {
     return (
         <div>
             <div className="absolute top-0">
                 <HomeToolbar />
             </div>
-            <div className="mx-4">
-                <div className="mt-24">
-                    <h1 className="font-bold">Team <span className="text-gray-600 text-sm font-normal">4/13/20</span></h1>
-                    <div className="overflow-x-auto flex">
-                        {statCategories.map((x, index) => (
-                            <TopPercentageCard key={index} statName={x} percentage={93} change={4} />
-                        ))}
-                    </div>
-                </div>
-                <h1 className="font-bold mt-6 mb-2">Efficiency  <span className="text-gray-600 text-sm font-normal">4/13/20</span></h1>
-                <div className="flex overflow-x-auto">
-                    {statCategories.map((statName, index) => (
-                        <StatList statName={statName} players={players} key={index} type="percent" />
-                    ))}
-                </div>
-                <h1 className="font-bold mt-6 mb-2">Reps  <span className="text-gray-600 text-sm font-normal">4/13/20</span></h1>
-                <div className="flex overflow-x-auto">
-                    {statCategories.map((statName, index) => (
-                        <StatList statName={statName} players={players} key={index} type="reps" />
-                    ))}
-                </div>
-                <Footer />
-            </div>
-        </div>
+            <div className="mx-4 mt-24">
+                <h1 className="mb-4"><span className="text-gray-600 font-normal text-sm"> 8/24/2020</span></h1>
+                <WinCard dateParam="day" dateText="Day" />
+                <WinCard dateParam="week" dateText="Week" />
+                <WinCard dateParam="month" dateText="Month" />
+                <WinCard dateParam="year" dateText="Year" />
+                < Footer />
+            </div >
+        </div >
 
     );
 }

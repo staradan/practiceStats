@@ -1,7 +1,10 @@
 import React, { useState } from "react";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from 'axios';
 import { addPlayer } from '../js/actions/index';
 import { connect } from 'react-redux';
+import firebase from 'firebase';
 
 
 function mapDispatchToProps(dispatch) {
@@ -12,40 +15,59 @@ function mapDispatchToProps(dispatch) {
 
 const AddPlayerForm = ({ addPlayer }) => {
 
-    const [name, setName] = useState("");
+    const [playerName, setName] = useState("");
 
     const handleSubmit = (evt) => {
+        const db = firebase.firestore();
         evt.preventDefault();
 
         let player = {
-            name: name,
+            playerName: playerName,
             teamID: 1,
+            playerID: Math.random() * 1000,
         };
-        axios.post('http://localhost:3000/players/add', player)
-            .then(function (response) {
-                console.log(response);
-                addPlayer({ player })
-            }).catch(() => {
-                console.log('uh oh!');
+        db.collection('players').add(player)
+            .then(function () {
+                addPlayer({ player });
             })
+            .catch(function (error) {
+                console.error("Error adding document: ", error);
+            });
 
         setName('');
     }
 
     return (
-        <div className="mb-6 mt-4">
-            <p className="text-sm font-bold mb-1">Add A New Player</p>
+
+        <div className="flex items-center bg-white rounded shadow my-2 p-4">
             <form onSubmit={handleSubmit}>
+                <button type="submit">
+                    <FontAwesomeIcon icon={faPlus} className="text-green-400 mr-3" />
+                </button>
                 <input
                     className="border-b"
                     placeholder="Enter full name here"
                     type="text"
-                    value={name}
+                    value={playerName}
                     onChange={e => setName(e.target.value)}
                 />
-                <button className="text-blue-600 font-bold ml-3" type="submit">Add</button>
             </form>
         </div>
+
+
+        // <div className="mb-6 mt-4">
+        //     <p className="text-sm font-bold mb-1">Add A New Player</p>
+        //     <form onSubmit={handleSubmit}>
+        //         <input
+        //             className="border-b"
+        //             placeholder="Enter full name here"
+        //             type="text"
+        //             value={playerName}
+        //             onChange={e => setName(e.target.value)}
+        //         />
+        //         <button className="text-blue-600 font-bold ml-3" type="submit">Add</button>
+        //     </form>
+        // </div>
     );
 }
 

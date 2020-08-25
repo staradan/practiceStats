@@ -8,10 +8,22 @@ const mapStateToProps = state => {
     return { stats: state.stats };
 };
 
+//maybe add the stuff
+const datesAreOnSameDay = (first, second, dateParam) => {
+    if (dateParam === 'day') {
+        console.log('day');
+        return (
+            first.getFullYear() === second.getFullYear() &&
+            first.getMonth() === second.getMonth() &&
+            first.getDate() === second.getDate()
+        );
+    }
+}
+
 function StatHistoryView({ stats }) {
     if (stats != null) {
         return (
-            <div className="w-full text-center h-48 overflow-y-scroll rounded-sm border">
+            <div className="w-full text-center h-48 overflow-y-scroll rounded-sm shadow">
                 {
                     stats.slice(0).reverse().map((stat, index) => (
                         <StatHistoryRow

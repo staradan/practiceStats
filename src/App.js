@@ -7,6 +7,7 @@ import ManageTeam from './pages/manageTeam';
 import Home from './pages/home';
 import { addStat, addPlayer } from './js/actions/index';
 import { connect } from 'react-redux';
+import firebase from 'firebase';
 
 function mapDispatchToProps(dispatch) {
   return {
@@ -16,30 +17,34 @@ function mapDispatchToProps(dispatch) {
 }
 
 const App = function ({ addStat, addPlayer }) {
+
   useEffect(() => {
-    console.log('here');
-    //get the players
-    //get the stats
-    //get the stat categories
-    axios
-      .get('http://104.248.232.231/stats')
-      .then((stats) => {
-        stats.data.map((stat) => {
-          addStat({ stat });
-        });
-      })
-      .catch((err) => console.log(err));
+    const db = firebase.firestore();
 
+    db.collection("stats").get().then(function (querySnapshot) {
+      querySnapshot.forEach(function (doc) {
+        // doc.data() is never undefined for query doc snapshots
 
-    axios
-      .get('http://104.248.232.231/players')
-      .then((players) => {
-        players.data.map((player) => {
-          console.log(player);
-          addPlayer({ player });
-        })
-      })
-      .catch((err) => console.log(err));
+        let stat = {
+          playerName: doc.data().playerName,
+          createdAt: doc.data().createdAt,
+          statName: doc.data().statName,
+          isPositive: doc.data().isPositive,
+          statID: doc.data().statID,
+        }
+        addStat({ stat });
+      });
+    });
+    db.collection("players").get().then(function (querySnapshot) {
+      querySnapshot.forEach(function (doc) {
+        let player = {
+          teamID: doc.data().teamID,
+          playerName: doc.data().playerName,
+          playerID: doc.data().playerID,
+        }
+        addPlayer({ player });
+      });
+    });
 
 
   }, [addStat, addPlayer]);

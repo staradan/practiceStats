@@ -13,19 +13,19 @@ const mapStateToProps = state => {
 
 const QuickRecordTable = ({ statCategories, players, stats }) => {
     return (
-        <div className="overflow-scroll rounded-sm">
-            <div className="flex items-center">
-                <div className="w-24 sticky left-0 flex-none font-semibold text-sm text-gray-700 bg-gray-400 border-gray-600 border-r-2 text-left px-4 py-2 big-width">Name</div>
+        <div className="overflow-scroll rounded-sm border border-gray-400 shadow">
+            <div className="flex items-center relative">
+                <div className="w-1/4 ml-4 fixed left-0 flex-none font-semibold text-sm text-gray-700 bg-gray-400 border-gray-600 border-r-2 text-left px-4 big-width">Name</div>
                 {stats != null ? statCategories.map((statName, index) => (
                     <ColumnHeader statName={statName} key={index} />
                 )) : <h1>Loading...</h1>}
             </div>
             <div>
-                {players.map((player, index) => (
-                    <PlayerRow name={player.player.name} darkGray={(index % 2 === 1)} key={index} />
+                {players.map((x, index) => (
+                    <PlayerRow playerName={x.player.playerName} darkGray={(index % 2 === 1)} key={index} />
                 ))}
             </div>
-        </div>
+        </div >
     );
 }
 

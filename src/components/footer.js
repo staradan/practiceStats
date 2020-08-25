@@ -24,12 +24,12 @@ function Footer() {
                         </div>
                         <span className="tab tab-explore block text-xs">Take Stats</span>
                     </Link>
-                    <Link to="/view" className="w-full focus:text-red-500 hover:text-red-500 justify-center inline-block text-center pt-2 pb-1">
+                    {/* <Link to="/view" className="w-full focus:text-red-500 hover:text-red-500 justify-center inline-block text-center pt-2 pb-1">
                         <div className="inline-block mb-1">
                             <FontAwesomeIcon icon={faArrowsAltV} />
                         </div>
                         <span className="tab tab-whishlist block text-xs">Leaders</span>
-                    </Link>
+                    </Link> */}
                     <Link to="/manage" className="w-full focus:text-red-500 hover:text-red-500 justify-center inline-block text-center pt-2 pb-1">
                         <div className="inline-block mb-1">
                             <FontAwesomeIcon icon={faEllipsisH} />
