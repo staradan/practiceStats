@@ -25,8 +25,6 @@ const addNewStat = (name, statName, isPositive, addStat) => {
 
     db.collection('stats').add(stat)
         .then(function (docRef) {
-            //add the docRef.id ot the stat and delete it by that if possible...
-            console.log(docRef);
             stat.documentID = docRef.id;
             addStat({ stat });
         })

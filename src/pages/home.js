@@ -24,7 +24,6 @@ const Home = ({ statCategories }) => {
         })
     });
     const handleChange = selectedOption => {
-        console.log('first', selectedOption.value);
         setSelectedOption(selectedOption.value);
     };
     return (
@@ -33,21 +32,22 @@ const Home = ({ statCategories }) => {
                 <HomeToolbar />
             </div>
             <div className="mx-4 mt-24">
-                <h1 className="text-gray-600 font-normal text-sm w-1/12 content-center mb-4">8/24/2020</h1>
-                <WinCard dateParam="day" dateText="Day" statCategory={selectedOption} />
-                <WinCard dateParam="week" dateText="Week" statCategory={selectedOption} />
-                <WinCard dateParam="month" dateText="Month" statCategory={selectedOption} />
-                <WinCard dateParam="year" dateText="Year" statCategory={selectedOption} />
-                <div className="flex content-center">
-                    <div className="w-2/12">
-                        <Select
-                            className="z-50"
-                            placeholder={selectedOption}
-                            value={selectedOption}
-                            onChange={handleChange}
-                            options={options}
-                        />
+                <div className="mb-24">
+                    <h1 className="text-gray-600 font-normal text-sm w-1/12 content-center">8/24/2020</h1>
+                    <div className="flex my-4">
+                        <div className="w-full">
+                            <Select
+                                placeholder={selectedOption}
+                                value={selectedOption}
+                                onChange={handleChange}
+                                options={options}
+                            />
+                        </div>
                     </div>
+                    <WinCard dateParam="day" dateText="Day" statCategory={selectedOption} />
+                    <WinCard dateParam="week" dateText="Week" statCategory={selectedOption} />
+                    <WinCard dateParam="month" dateText="Month" statCategory={selectedOption} />
+                    <WinCard dateParam="year" dateText="Year" statCategory={selectedOption} />
                 </div>
                 < Footer />
             </div >

@@ -5,7 +5,7 @@ import Footer from '../components/footer'
 import { Link } from 'react-router-dom';
 
 function TakeStats() {
-    const [password, setPassword] = useState('6969');
+    const [password, setPassword] = useState('');
 
     if (password === '6969') {
         return (

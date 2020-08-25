@@ -11,7 +11,6 @@ const mapStateToProps = state => {
 //maybe add the stuff
 const datesAreOnSameDay = (first, second, dateParam) => {
     if (dateParam === 'day') {
-        console.log('day');
         return (
             first.getFullYear() === second.getFullYear() &&
             first.getMonth() === second.getMonth() &&
