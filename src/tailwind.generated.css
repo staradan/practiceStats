@@ -15283,10 +15283,6 @@ video {
   width: 1px;
 }
 
-.w-test {
-  width: 200vw;
-}
-
 .w-1\/2 {
   width: 50%;
 }
@@ -15393,10 +15389,6 @@ video {
 
 .w-full {
   width: 100%;
-}
-
-.w-full-2 {
-  width: 150%;
 }
 
 .w-screen {

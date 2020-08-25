@@ -54,7 +54,7 @@ const PlusMinusBox = ({ playerName, statName, rowBackgroundColor, addStat }) => 
         return (
             <div className={"w-1/12 flex-none text-gray-700 border-gray-500 border-r text-center " + rowBackgroundColor}>
                 <button className="inline w-full flex-none py-4" onClick={() => { addNewStat(playerName, statName, false, addStat) }}>
-                    <FontAwesomeIcon icon={faPlus} className={"text-orange-400"} />
+                    <FontAwesomeIcon icon={faPlus} className={"text-red-400"} />
                 </button>
             </div>
         );
