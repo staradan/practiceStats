@@ -41,7 +41,7 @@ const PlusMinusBox = ({ playerName, statName, rowBackgroundColor, addStat }) => 
 
     if (statName != 'Ball On Ground') {
         return (
-            <div className={"w-1/4 flex-none text-gray-700 border-gray-500 border-r text-center " + rowBackgroundColor}>
+            <div className={"w-1/12 flex-none text-gray-700 border-gray-500 border-r text-center " + rowBackgroundColor}>
                 <button className="inline w-6/12 flex-none px-2 py-4 border-r" onClick={() => { addNewStat(playerName, statName, true, addStat) }}>
                     <FontAwesomeIcon icon={faPlus} className={"text-blue-500"} />
                 </button>
@@ -52,7 +52,7 @@ const PlusMinusBox = ({ playerName, statName, rowBackgroundColor, addStat }) => 
         );
     } else {
         return (
-            <div className={"w-1/4 flex-none text-gray-700 border-gray-500 border-r text-center " + rowBackgroundColor}>
+            <div className={"w-1/12 flex-none text-gray-700 border-gray-500 border-r text-center " + rowBackgroundColor}>
                 <button className="inline w-full flex-none py-4" onClick={() => { addNewStat(playerName, statName, false, addStat) }}>
                     <FontAwesomeIcon icon={faPlus} className={"text-orange-400"} />
                 </button>
