@@ -38,7 +38,6 @@ const AddPlayerForm = ({ addPlayer }) => {
     }
 
     return (
-
         <div className="flex items-center bg-white rounded shadow my-2 p-4">
             <form onSubmit={handleSubmit}>
                 <button type="submit">

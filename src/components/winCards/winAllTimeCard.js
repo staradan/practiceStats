@@ -35,39 +35,34 @@ const datesAreOnSameDay = (first, second, dateParam) => {
     }
 }
 
-const calculateAllPositives = (player, stats, dateParam) => {
-    let positiveStats = 0;
-    if (stats) {
-        stats.map(x => {
-            let statDay = new Date(x.stat.createdAt.seconds * 1000);
-            if (x.stat.isPositive && x.stat.playerName === player && datesAreOnSameDay(statDay, new Date(), dateParam)) {
-                positiveStats++;
-            }
-        });
-    }
-    return positiveStats;
-};
-
-const calculateAllNegatives = (player, stats, dateParam) => {
+const calculatePosAndNeg = (player, stats, dateParam, statCategory) => {
     let neutrals = ['Competitive', 'Diving'];
+    let statArray = [];
+    let positiveStats = 0;
     let negativeStats = 0;
     if (stats) {
         stats.map(x => {
             let statDay = new Date(x.stat.createdAt.seconds * 1000);
-            if (!x.stat.isPositive && x.stat.playerName === player && !neutrals.includes(x.stat.statName) && datesAreOnSameDay(statDay, new Date(), dateParam)) {
-                negativeStats++;
+            if (x.stat.playerName === player && datesAreOnSameDay(statDay, new Date(), dateParam)) {
+                if (x.stat.isPositive) {
+                    positiveStats++;
+                } else if (!x.stat.isPositive && !neutrals.includes(x.stat.statName)) {
+                    negativeStats++;
+                }
             }
-        })
+        });
     }
-    return negativeStats;
-}
+    statArray.push(positiveStats);
+    statArray.push(negativeStats);
+    return statArray;
+};
 
 const overallRanking = (players, stats, dateParam) => {
     let playerArray = []
     if (players) {
         players.map(x => {
-            let totalPositives = calculateAllPositives(x.player.playerName, stats, dateParam);
-            let totalNegatives = calculateAllNegatives(x.player.playerName, stats, dateParam);
+            let totalPositives = calculatePosAndNeg(x.player.playerName, stats, dateParam)[0];
+            let totalNegatives = calculatePosAndNeg(x.player.playerName, stats, dateParam)[1];
             let totalChances = totalPositives + totalNegatives;
 
             let playerStatInfo = {
@@ -85,14 +80,20 @@ const overallRanking = (players, stats, dateParam) => {
     return playerArray.sort((a, b) => (a.totalPercent > b.totalPercent) ? -1 : 1)
 }
 
-const WinYearCard = ({ players, stats, dateParam, dateText }) => {
-    let playerArray = overallRanking(players, stats, dateParam);
+const WinYearCard = ({ players, stats, dateParam, dateText, statCategory }) => {
+    let playerArray = overallRanking(players, stats, dateParam, statCategory);
     if (playerArray.length > 1) {
         return (
             <div className="bg-white shadow p-4 rounded mb-4">
                 <h1 className="font-bold border-b mb-2 pb-2">Win The <span className="text-red-600">{dateText}</span></h1>
-                <h1 className="text-lg">1. {playerArray[0].playerName} <span>{playerArray[0].totalPercent ? playerArray[0].totalPercent : '-'}%</span></h1>
-                <h1 className="text-gray-600 font-sm">2. {playerArray[1].playerName} <span>{playerArray[1].totalPercent ? playerArray[1].totalPercent : '-'}%</span></h1>
+                <div className="text-lg flex w-full">
+                    <span className="w-1/12 text-left text-right mr-3">{playerArray[0].totalPercent ? playerArray[0].totalPercent : '-'}%</span>
+                    <h1 className="w-11/12">{playerArray[0].playerName}</h1>
+                </div>
+                <div className="text-md text-gray-600 flex w-full">
+                    <span className="w-1/12 text-left text-right mr-3">{playerArray[1].totalPercent ? playerArray[1].totalPercent : '-'}%</span>
+                    <h1 className="w-11/12">{playerArray[1].playerName}</h1>
+                </div>
             </div>
         );
     } else {
