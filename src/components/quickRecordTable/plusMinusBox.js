@@ -26,6 +26,7 @@ const addNewStat = (name, statName, isPositive, addStat) => {
     db.collection('stats').add(stat)
         .then(function (docRef) {
             stat.documentID = docRef.id;
+            console.log('added!');
             addStat({ stat });
         })
         .catch(function (error) {

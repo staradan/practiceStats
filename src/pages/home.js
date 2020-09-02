@@ -4,6 +4,7 @@ import Footer from '../components/footer'
 import WinCard from '../components/winCards/winAllTimeCard';
 import { connect } from 'react-redux';
 import Select from 'react-select';
+import QuickViewTable from '../components/quickViewTable/quickViewTable';
 
 const mapStateToProps = state => {
     return {
@@ -34,7 +35,7 @@ const Home = ({ statCategories }) => {
             <div className="mx-4 mt-24">
                 <div className="mb-24">
                     <h1 className="text-gray-600 font-normal text-sm w-1/12 content-center">8/24/2020</h1>
-                    <div className="flex my-4">
+                    {/* <div className="flex my-4">
                         <div className="w-full">
                             <Select
                                 placeholder={selectedOption}
@@ -43,11 +44,12 @@ const Home = ({ statCategories }) => {
                                 options={options}
                             />
                         </div>
-                    </div>
-                    <WinCard dateParam="day" dateText="Day" statCategory={selectedOption} />
-                    <WinCard dateParam="week" dateText="Week" statCategory={selectedOption} />
+                    </div> 
+                    <WinCard dateParam="day" dateText="Day" />*/}
+                    <QuickViewTable />
+                    {/* <WinCard dateParam="week" dateText="Week" statCategory={selectedOption} />
                     <WinCard dateParam="month" dateText="Month" statCategory={selectedOption} />
-                    <WinCard dateParam="year" dateText="Year" statCategory={selectedOption} />
+                    <WinCard dateParam="year" dateText="Year" statCategory={selectedOption} /> */}
                 </div>
                 < Footer />
             </div >

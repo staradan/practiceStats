@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
 import React from 'react';
+import * as Cruncher from '../../numberCrunchers/index'
 
 const mapStateToProps = state => {
     return {
@@ -10,77 +11,86 @@ const mapStateToProps = state => {
 }
 
 
-const datesAreOnSameDay = (first, second, dateParam) => {
-    if (dateParam === 'day') {
-        return (
-            first.getFullYear() === second.getFullYear() &&
-            first.getMonth() === second.getMonth() &&
-            first.getDate() === second.getDate()
-        );
-    } else if (dateParam === 'week') {
-        //gotta fix this one man
-        return true;
-    } else if (dateParam === 'month') {
-        return (
-            first.getFullYear() === second.getFullYear() &&
-            first.getMonth() === second.getMonth()
-        );
-    } else if (dateParam === 'year') {
-        return (
-            first.getFullYear() === second.getFullYear()
-        )
-    } else {
-        return true;
-    }
-}
+// const calculatePosAndNeg = (player, stats, dateParam, statCategory) => {
+//     let neutrals = ['Competitive', 'Diving'];
+//     let statArray = [];
+//     let positiveStats = 0;
+//     let negativeStats = 0;
+//     if (stats) {
+//         stats.map(x => {
+//             let statDay = new Date(x.stat.createdAt.seconds * 1000);
+//             console.log(x.stat.playerName, player);
+//             if (x.stat.playerName === player && Cruncher.datesAreInRange(statDay, new Date(), dateParam)) {
+//                 if (x.stat.isPositive) {
+//                     positiveStats++;
+//                 } else if (!x.stat.isPositive && !neutrals.includes(x.stat.statName)) {
+//                     negativeStats++;
+//                 }
+//             }
+//         });
+//     }
+//     statArray.push(positiveStats);
+//     statArray.push(negativeStats);
+//     return statArray;
+// };
 
-const calculatePosAndNeg = (player, stats, dateParam, statCategory) => {
-    let neutrals = ['Competitive', 'Diving'];
-    let statArray = [];
-    let positiveStats = 0;
-    let negativeStats = 0;
-    if (stats) {
-        stats.map(x => {
-            let statDay = new Date(x.stat.createdAt.seconds * 1000);
-            if (x.stat.playerName === player && datesAreOnSameDay(statDay, new Date(), dateParam)) {
-                if (x.stat.isPositive) {
-                    positiveStats++;
-                } else if (!x.stat.isPositive && !neutrals.includes(x.stat.statName)) {
-                    negativeStats++;
-                }
-            }
-        });
-    }
-    statArray.push(positiveStats);
-    statArray.push(negativeStats);
-    return statArray;
-};
+// const overallRanking = (players, stats, dateParam) => {
+//     let playerArray = []
+//     if (players) {
+//         players.map(x => {
+//             let totalPositives = calculatePosAndNeg(x.player.playerName, stats, dateParam)[0];
+//             let totalNegatives = calculatePosAndNeg(x.player.playerName, stats, dateParam)[1];
+//             let totalChances = totalPositives + totalNegatives;
 
-const overallRanking = (players, stats, dateParam) => {
-    let playerArray = []
-    if (players) {
-        players.map(x => {
-            let totalPositives = calculatePosAndNeg(x.player.playerName, stats, dateParam)[0];
-            let totalNegatives = calculatePosAndNeg(x.player.playerName, stats, dateParam)[1];
-            let totalChances = totalPositives + totalNegatives;
+//             let playerStatInfo = {
+//                 playerName: x.player.playerName,
+//                 totalPositives: totalPositives,
+//                 totalNegatives: totalNegatives,
+//                 totalChances: (totalPositives + totalNegatives),
+//                 totalPercent: Math.round(((totalPositives / totalChances) * 100) * 10) / 10,
+//             }
+//             playerArray.push(playerStatInfo);
+//         });
+//     }
 
-            let playerStatInfo = {
-                playerName: x.player.playerName,
-                totalPositives: totalPositives,
-                totalNegatives: totalNegatives,
-                totalChances: (totalPositives + totalNegatives),
-                totalPercent: Math.round(((totalPositives / totalChances) * 100) * 10) / 10,
-            }
-            playerArray.push(playerStatInfo);
-        });
-    }
-
-    //return the sorted array
-    return playerArray.sort((a, b) => (a.totalPercent > b.totalPercent) ? -1 : 1)
-}
+//     //return the sorted array
+//     return playerArray.sort((a, b) => (a.totalPercent > b.totalPercent) ? -1 : 1)
+// }
 
 const WinYearCard = ({ players, stats, dateParam, dateText, statCategory }) => {
-    let playerArray = overallRanking(players, stats, dateParam, statCategory);
+    let playerArray = [];
+    let neutrals = ['Competitive', 'Diving'];
+    players.map(x => {
+        let posCounter = 0;
+        let negCounter = 0;
+        stats.map(y => {
+            if (x.player.playerName === y.stat.playerName && y.stat.isPositive) {
+                console.log('hello');
+                posCounter++;
+            } else if(x.player.playerName === y.stat.playerName && (!y.stat.isPositive)){
+                negCounter++;
+            }
+            // if (x.player.playerName === y.stat.playerName) {
+            //     if (y.stat.isPositive) {
+            //         posCounter++;
+            //     } else if (!y.stat.isPositive && !neutrals.includes(y.stat.statName)) {
+            //         negCounter++;
+            //     }
+            // }
+        });
+        let playerObject = {
+            playerName: x.player.playerName,
+            totalPositives: posCounter,
+            totalNegatives: negCounter,
+            totalChances: posCounter + negCounter,
+            totalPercent: Math.round(((posCounter / (posCounter + negCounter)) * 100) * 10) / 10
+        }
+        playerArray.push(playerObject);
+    });
+
+    playerArray.sort((a, b) => (a.totalPercent > b.totalPercent) ? -1 : 1)
+
+    //let playerArray = overallRanking(players, stats, dateParam, statCategory);
     if (playerArray.length > 1) {
         return (
             <div className="bg-white shadow p-4 rounded mb-4">

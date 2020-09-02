@@ -1,16 +1,7 @@
 import { ADD_ARTICLE, ADD_STAT, DELETE_STAT, ADD_PLAYER, DELETE_PLAYER } from '../constants/action-types';
 const initialState = { //will have to get this from database somewhere
     teamName: 'Nebraska',
-    players: [
-        // 'Spencer Schwellenbach',
-        // 'Adrian Martinez',
-        // 'Jaxon Hallmark',
-        // 'Eminem Meminem',
-        // 'Andrew Carnegie',
-        // 'Julio Jones',
-        // 'Tom Brady',
-        // 'Philip Rivers',
-    ],
+    players: [],
     statCategories: [
         'Throwing',
         'Fielding',
@@ -21,7 +12,6 @@ const initialState = { //will have to get this from database somewhere
         'Ball On Ground',
     ],
     stats: [],
-    articles: [],
 }
 
 function rootReducer(state = initialState, action) {
