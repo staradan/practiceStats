@@ -5,10 +5,10 @@ const initialState = { //will have to get this from database somewhere
     statCategories: [
         'Throwing',
         'Fielding',
-        'Diving',
+        'Picks',
+        'Awareness',
         'Competitive',
-        'Catching',
-        'Hustle',
+        'Diving',
         'Ball On Ground',
     ],
     stats: [],

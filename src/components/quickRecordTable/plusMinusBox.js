@@ -13,7 +13,7 @@ function mapDispatchToProps(dispatch) {
     };
 }
 
-const addNewStat = (name, statName, isPositive, addStat) => {
+const addNewStat = (name, statName, isPositive, addStat, firebase) => {
     const db = firebase.firestore();
     const stat = {
         statName: statName,
@@ -23,19 +23,20 @@ const addNewStat = (name, statName, isPositive, addStat) => {
         statID: Math.random() * 1000,
     }
 
-    db.collection('stats').add(stat)
-        .then(function (docRef) {
-            stat.documentID = docRef.id;
-            console.log('added!');
-            addStat({ stat });
-        })
-        .catch(function (error) {
-            alert('Error. Stat was not saved');
-            console.error("Error adding document: ", error);
-        });
+
+    // db.collection('stats').add(stat)
+    //     .then(function (docRef) {
+    //         stat.documentID = docRef.id;
+    //         console.log('added!');
+    //         addStat({ stat });
+    //     })
+    //     .catch(function (error) {
+    //         alert('Error. Stat was not saved');
+    //         console.error("Error adding document: ", error);
+    //     });
 }
 
-const PlusMinusBox = ({ playerName, statName, rowBackgroundColor, addStat }) => {
+const PlusMinusBox = ({ playerName, statName, rowBackgroundColor, addStat, firebase }) => {
     const minusColor = (statName === 'Competitive' || statName === 'Diving') ? 'text-orange-400' : 'text-red-500';
 
     if (statName != 'Ball On Ground') {
@@ -44,7 +45,7 @@ const PlusMinusBox = ({ playerName, statName, rowBackgroundColor, addStat }) => 
                 <button className="inline w-6/12 flex-none px-2 py-4 border-r" onClick={() => { addNewStat(playerName, statName, true, addStat) }}>
                     <FontAwesomeIcon icon={faPlus} className={"text-blue-500"} />
                 </button>
-                <button className="inline w-6/12 flex-none px-2 py-4" onClick={() => { addNewStat(playerName, statName, false, addStat) }}>
+                <button className="inline w-6/12 flex-none px-2 py-4" onClick={() => { addNewStat(playerName, statName, false, addStat, firebase) }}>
                     <FontAwesomeIcon icon={faMinus} className={minusColor} />
                 </button>
             </div>
@@ -52,7 +53,7 @@ const PlusMinusBox = ({ playerName, statName, rowBackgroundColor, addStat }) => 
     } else {
         return (
             <div className={"w-1/12 flex-none text-gray-700 border-gray-500 border-r text-center " + rowBackgroundColor}>
-                <button className="inline w-full flex-none py-4" onClick={() => { addNewStat(playerName, statName, false, addStat) }}>
+                <button className="inline w-full flex-none py-4" onClick={() => { addNewStat(playerName, statName, false, addStat, firebase) }}>
                     <FontAwesomeIcon icon={faPlus} className={"text-red-400"} />
                 </button>
             </div>

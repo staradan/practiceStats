@@ -13,7 +13,7 @@ const mapStateToProps = state => {
 
 
 const PlusMinusBox = ({ playerName, statName, rowBackgroundColor, addStat, stats }) => {
-    const minusColor = (statName === 'Competitive' || statName === 'Diving') ? 'text-orange-400' : 'text-red-500';
+    const minusColor = (statName === 'Competitive' || statName === 'Diving') ? 'font-bold text-orange-400' : 'font-bold text-red-500';
     const positiveStats = () => {
         let numPositiveStats = 0;
         stats.map(x => {
@@ -34,15 +34,14 @@ const PlusMinusBox = ({ playerName, statName, rowBackgroundColor, addStat, stats
 
         return numPositiveStats;
     }
-    positiveStats();
     if (statName != 'Ball On Ground') {
         return (
             <div className={"w-1/12 flex-none text-gray-700 border-gray-500 border-r text-center " + rowBackgroundColor}>
                 <button className="inline w-6/12 flex-none px-2 py-4 border-r">
-                    <h1 className="text-blue-500">{positiveStats()}</h1>
+                    <h1 className={positiveStats() > 0 ? 'font-bold text-blue-500' : 'text-gray-500'}>{positiveStats()}</h1>
                 </button>
                 <button className="inline w-6/12 flex-none px-2 py-4">
-                    <h1 className={minusColor}>{negativeStats()}</h1>
+                    <h1 className={negativeStats() > 0 ? minusColor : 'text-gray-500'}>{negativeStats()}</h1>
                 </button>
             </div>
         );
@@ -50,7 +49,7 @@ const PlusMinusBox = ({ playerName, statName, rowBackgroundColor, addStat, stats
         return (
             <div className={"w-1/12 flex-none text-gray-700 border-gray-500 border-r text-center " + rowBackgroundColor}>
                 <button className="inline w-full flex-none py-4" >
-                    <h1 className="text-red-400">{negativeStats()}</h1>
+                    <h1 className={negativeStats() > 0 ? 'font-bold text-red-400' : 'text-gray-500'}>{negativeStats()}</h1>
                 </button>
             </div>
         );

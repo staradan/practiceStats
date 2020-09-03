@@ -5,6 +5,12 @@ import WinCard from '../components/winCards/winAllTimeCard';
 import { connect } from 'react-redux';
 import Select from 'react-select';
 import QuickViewTable from '../components/quickViewTable/quickViewTable';
+import { DatePicker } from 'react-rainbow-components';
+import Firebase, { FirebaseContext } from '../firebase'
+//import firebase from 'firebase';
+//const db = firebase.firestore();
+
+let players = [];
 
 const mapStateToProps = state => {
     return {
@@ -12,49 +18,57 @@ const mapStateToProps = state => {
     }
 }
 
-const Home = ({ statCategories }) => {
-    const options = [];
-    const [selectedOption, setSelectedOption] = useState('Overall');
-    options.push({
-        value: 'Overall',
-        label: 'Overall'
-    })
-    statCategories.map(x => {
-        options.push({
-            value: x, label: x
-        })
-    });
-    const handleChange = selectedOption => {
-        setSelectedOption(selectedOption.value);
-    };
-    return (
-        <div>
-            <div className="absolute top-0">
-                <HomeToolbar />
-            </div>
-            <div className="mx-4 mt-24">
-                <div className="mb-24">
-                    <h1 className="text-gray-600 font-normal text-sm w-1/12 content-center">8/24/2020</h1>
-                    {/* <div className="flex my-4">
-                        <div className="w-full">
-                            <Select
-                                placeholder={selectedOption}
-                                value={selectedOption}
-                                onChange={handleChange}
-                                options={options}
-                            />
-                        </div>
-                    </div> 
-                    <WinCard dateParam="day" dateText="Day" />*/}
-                    <QuickViewTable />
-                    {/* <WinCard dateParam="week" dateText="Week" statCategory={selectedOption} />
-                    <WinCard dateParam="month" dateText="Month" statCategory={selectedOption} />
-                    <WinCard dateParam="year" dateText="Year" statCategory={selectedOption} /> */}
-                </div>
-                < Footer />
-            </div >
-        </div >
+async function getPlayers() {
+    // let players = [];
+    // let databasePlayers = await db.collection("players").get();
 
+    // console.log(databasePlayers);
+
+
+    // .then(function (querySnapshot) {
+    //     querySnapshot.forEach(function (doc) {
+    //         let player = {
+    //             teamID: doc.data().teamID,
+    //             playerName: doc.data().playerName,
+    //             playerID: doc.data().playerID,
+    //             stats: [],
+    //         }
+    //         players.push(player);
+    //     });
+    // });
+
+    return players;
+}
+
+const Home = (props) => {
+    const [date, setDate] = useState(new Date());
+
+    //add all the players and stats to the context
+
+
+    return (
+        <FirebaseContext.Consumer>
+            {(context) => (
+                <div>
+                    <div className="absolute top-0">
+                        <HomeToolbar />
+                    </div>
+                    <div className="mx-4 mt-24">
+                        <div className="mb-24">
+                            <div className="mb-4 md:w-1/2">
+                                <DatePicker
+                                    formatStyle="small"
+                                    value={context.dateShown}
+                                    onChange={value => setDate(value)}
+                                />
+                            </div>
+                            <QuickViewTable />
+                        </div>
+                        < Footer />
+                    </div >
+                </div>
+            )}
+        </FirebaseContext.Consumer>
     );
 }
 

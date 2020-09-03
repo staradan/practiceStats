@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, Component, useState } from 'react'
 import { Route, Switch, BrowserRouter as Router } from 'react-router-dom'
 import TakeStats from './pages/takeStats';
 import ViewInsights from './pages/viewInsights';
@@ -6,8 +6,41 @@ import ManageTeam from './pages/manageTeam';
 import Home from './pages/home';
 import { addStat, addPlayer } from './js/actions/index';
 import { connect } from 'react-redux';
-import firebase from 'firebase';
+//import firebase from 'firebase';
 import * as Cruncher from './numberCrunchers';
+import * as Cont from './context/contextInit'
+import Firebase, { FirebaseContext } from './firebase'
+const globalFirebase = new Firebase();
+
+
+//const MyContext = Cont.MyContext;
+
+// Then create a provider Component
+// class MyProvider extends Component {
+//   state = {
+//     teamName: 'Nebraska',
+//     sport: 'Baseball',
+//     players: [],
+//     statCategories: [
+//       'Throwing',
+//       'Fielding',
+//       'Picks',
+//       'Awareness',
+//       'Competitive',
+//       'Diving',
+//       'Ball On Ground',
+//     ],
+//     stats: [],
+//   }
+//   render() {
+//     return (
+//       <FirebaseContext.Provider value={new Firebase()}>
+//         {this.props.children}
+//       </FirebaseContext.Provider>
+//     )
+//   }
+// }
+
 
 function mapDispatchToProps(dispatch) {
   return {
@@ -16,40 +49,73 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-const App = function ({ addStat, addPlayer }) {
 
-  useEffect(() => {
-    const db = firebase.firestore();
-    db.collection("players").get().then(function (querySnapshot) {
-      querySnapshot.forEach(function (doc) {
-        let player = {
-          teamID: doc.data().teamID,
-          playerName: doc.data().playerName,
-          playerID: doc.data().playerID,
-          stats: [],
-        }
-        addPlayer({ player });
-      });
-    });
-    //check if the stat is today..
-    db.collection("stats").get().then(function (querySnapshot) {
-      querySnapshot.forEach(function (doc) {
-        let statDay = new Date(doc.data().createdAt.seconds * 1000);
-        if (Cruncher.datesAreInRange(statDay, new Date(), 'day')) {
-          let stat = {
-            playerName: doc.data().playerName,
-            createdAt: doc.data().createdAt,
-            statName: doc.data().statName,
-            isPositive: doc.data().isPositive,
-            statID: doc.data().statID,
-          }
-          addStat({ stat });
-        }
-      });
-    });
-  }, [addStat, addPlayer]);
+
+async function getStats() {
+  //let firebase = new Firebase();
+  //console.log(firebase);
+  //const players = await Firebase.db.collection("players").get();
+  // let players = [];
+  // console.log('hey', Firebase.d, players);
+}
+
+const App = function () {
+  const [sport, setSport] = useState('Baseball');
+  const [players, addPlayer] = useState(['Dan', 'Trent', 'Javier', 'Baez']);
+  const changeSport = () => { setSport('Soccer') };
+  const addUNOPlayer = () => { addPlayer(players => players.concat('dude')) };
+
+  getStats();
+  // let players = [];
+  // let stats = [];
+
+  // useEffect(() => {
+  //   const db = firebase.firestore();
+  //   db.collection("players").get().then(function (querySnapshot) {
+  //     querySnapshot.forEach(function (doc) {
+  //       let player = {
+  //         teamID: doc.data().teamID,
+  //         playerName: doc.data().playerName,
+  //         playerID: doc.data().playerID,
+  //         stats: [],
+  //       }
+  //       players.push(player);
+  //     });
+  //   });
+  //   //check if the stat is today..
+  //   db.collection("stats").get().then(function (querySnapshot) {
+  //     querySnapshot.forEach(function (doc) {
+  //       let stat = {
+  //         playerName: doc.data().playerName,
+  //         createdAt: doc.data().createdAt,
+  //         statName: doc.data().statName,
+  //         isPositive: doc.data().isPositive,
+  //         statID: doc.data().statID,
+  //       }
+  //       stats.push(stat);
+  //     });
+  //   });
+  // });
   return (
-    <div>
+    <FirebaseContext.Provider value={{
+      firebase: globalFirebase,
+      school: 'Nebraska',
+      categories: [
+        'Throwing',
+        'Fielding',
+        'Picks',
+        'Awareness',
+        'Competitive',
+        'Diving',
+        'Ball On Ground',
+      ],
+      stats: [],
+      dateShown: new Date(),
+      sport,
+      changeSport,
+      players,
+      addUNOPlayer,
+    }}>
       <Router>
         <Switch>
           <Route path="/" exact component={Home} />
@@ -58,7 +124,7 @@ const App = function ({ addStat, addPlayer }) {
           <Route path="/manage" component={ManageTeam} />
         </Switch>
       </Router>
-    </div>
+    </FirebaseContext.Provider>
   );
 }
 

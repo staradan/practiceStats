@@ -1,5 +1,5 @@
 import React from 'react';
-import logo from '../assets/unl-logo.jpg';
+import logo from '../assets/unl-logo.png';
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from 'react-router-dom';
