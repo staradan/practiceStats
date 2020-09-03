@@ -61,9 +61,9 @@ async function getStats() {
 
 const App = function () {
   const [sport, setSport] = useState('Baseball');
-  const [players, addPlayer] = useState(['Dan', 'Trent', 'Javier', 'Baez']);
+  const [players, setPlayers] = useState(['Dan', 'Trent', 'Javier', 'Baez']);
   const changeSport = () => { setSport('Soccer') };
-  const addUNOPlayer = () => { addPlayer(players => players.concat('dude')) };
+  const addAdditionalPlayer = () => { setPlayers(players => players.concat('dude')) };
 
   getStats();
   // let players = [];
@@ -114,7 +114,8 @@ const App = function () {
       sport,
       changeSport,
       players,
-      addUNOPlayer,
+      addAdditionalPlayer,
+      setPlayers,
     }}>
       <Router>
         <Switch>

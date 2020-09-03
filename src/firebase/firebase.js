@@ -18,7 +18,7 @@ class Firebase {
     app.initializeApp(config);
     this.db = firebase.firestore();
   }
-  getAllStats = () => {
+  getAllPlayers = () => {
     let players = [];
     this.db.collection("players").get().then(function (querySnapshot) {
       querySnapshot.forEach(function (doc) {

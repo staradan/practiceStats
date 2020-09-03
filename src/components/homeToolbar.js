@@ -13,14 +13,14 @@ const click = (context) => {
 }
 
 function HomeToolbar() {
-    const { players, addUNOPlayer, sport, setSport } = useContext(FirebaseContext);
+    const { players, addAdditionalPlayer, sport, setSport } = useContext(FirebaseContext);
 
     return (
         <FirebaseContext.Consumer>
             {(context) => (
                 <div className="w-screen p-4 flex items-center justify-start border-b border-gray-400">
                     <img src={logo} alt="Logo" className="w-10" />
-                    <p className="text-xl uppercase font-black" onClick={addUNOPlayer}>{sport}</p>
+                    <p className="text-xl uppercase font-black" onClick={addAdditionalPlayer}>{sport}</p>
                 </div>
             )}
         </FirebaseContext.Consumer>
