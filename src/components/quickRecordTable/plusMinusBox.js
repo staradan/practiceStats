@@ -1,11 +1,14 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { faMinus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { addStat } from '../../js/actions/index';
 import { connect } from 'react-redux';
-import axios from 'axios';
-import firebase from 'firebase';
+import { FirebaseContext } from '../../firebase';
+//import firestore from "firebase/firestore";
+//import axios from 'axios';
+//import firebase from 'firebase';
+
 
 function mapDispatchToProps(dispatch) {
     return {
@@ -13,50 +16,62 @@ function mapDispatchToProps(dispatch) {
     };
 }
 
-const addNewStat = (name, statName, isPositive, addStat, firebase) => {
-    const db = firebase.firestore();
-    const stat = {
-        statName: statName,
-        isPositive: isPositive,
-        playerName: name,
-        createdAt: firebase.firestore.Timestamp.fromDate(new Date()),
-        statID: Math.random() * 1000,
+
+const PlusMinusBox = ({ playerName, statName, rowBackgroundColor }) => {
+    const { addAdditionalStat, firebase, stats } = useContext(FirebaseContext);
+    const minusColor = (statName === 'Competitive' || statName === 'Diving') ? 'text-orange-400' : 'text-red-500';
+
+
+    const addNewStat = (name, statName, isPositive, addStat) => {
+        //const db = firebase.firestore();
+        console.log(stats);
+        const stat = {
+            statName: statName,
+            isPositive: isPositive,
+            playerName: name,
+            createdAt: firebase.getTimestamp(new Date()),
+            statID: Math.random() * 1000,
+        }
+        console.log(stat);
+        firebase.db.collection('stats').add(stat)
+            .then(function (docRef) {
+                stat.documentID = docRef.id;
+                addAdditionalStat(stat);
+                console.log('added!');
+            })
+            .catch(function (error) {
+                alert('Error. Stat was not saved');
+                console.error("Error adding document: ", error);
+            });
     }
 
 
-    // db.collection('stats').add(stat)
-    //     .then(function (docRef) {
-    //         stat.documentID = docRef.id;
-    //         console.log('added!');
-    //         addStat({ stat });
-    //     })
-    //     .catch(function (error) {
-    //         alert('Error. Stat was not saved');
-    //         console.error("Error adding document: ", error);
-    //     });
-}
-
-const PlusMinusBox = ({ playerName, statName, rowBackgroundColor, addStat, firebase }) => {
-    const minusColor = (statName === 'Competitive' || statName === 'Diving') ? 'text-orange-400' : 'text-red-500';
-
     if (statName != 'Ball On Ground') {
         return (
-            <div className={"w-1/12 flex-none text-gray-700 border-gray-500 border-r text-center " + rowBackgroundColor}>
-                <button className="inline w-6/12 flex-none px-2 py-4 border-r" onClick={() => { addNewStat(playerName, statName, true, addStat) }}>
-                    <FontAwesomeIcon icon={faPlus} className={"text-blue-500"} />
-                </button>
-                <button className="inline w-6/12 flex-none px-2 py-4" onClick={() => { addNewStat(playerName, statName, false, addStat, firebase) }}>
-                    <FontAwesomeIcon icon={faMinus} className={minusColor} />
-                </button>
-            </div>
+            <FirebaseContext.Consumer>
+                {(context) => (
+                    <div className={"w-1/12 flex-none text-gray-700 border-gray-500 border-r text-center " + rowBackgroundColor}>
+                        <button className="inline w-6/12 flex-none px-2 py-4 border-r" onClick={() => { addNewStat(playerName, statName, true, addStat) }}>
+                            <FontAwesomeIcon icon={faPlus} className={"text-blue-500"} />
+                        </button>
+                        <button className="inline w-6/12 flex-none px-2 py-4" onClick={() => { addNewStat(playerName, statName, false, addStat) }}>
+                            <FontAwesomeIcon icon={faMinus} className={minusColor} />
+                        </button>
+                    </div>
+                )}
+            </FirebaseContext.Consumer>
         );
     } else {
         return (
-            <div className={"w-1/12 flex-none text-gray-700 border-gray-500 border-r text-center " + rowBackgroundColor}>
-                <button className="inline w-full flex-none py-4" onClick={() => { addNewStat(playerName, statName, false, addStat, firebase) }}>
-                    <FontAwesomeIcon icon={faPlus} className={"text-red-400"} />
-                </button>
-            </div>
+            <FirebaseContext.Consumer>
+                {(context) => (
+                    <div className={"w-1/12 flex-none text-gray-700 border-gray-500 border-r text-center " + rowBackgroundColor}>
+                        <button className="inline w-full flex-none py-4" onClick={() => { addNewStat(playerName, statName, false, addStat) }}>
+                            <FontAwesomeIcon icon={faPlus} className={"text-red-400"} />
+                        </button>
+                    </div>
+                )}
+            </FirebaseContext.Consumer>
         );
     }
 }

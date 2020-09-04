@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import PlayerRow from './playerRow';
 import ColumnHeader from './columnHeader';
 import { FirebaseContext } from '../../firebase'
 
 const QuickRecordTable = () => {
+    const { players } = useContext(FirebaseContext);
+    console.log(players);
     return (
         <FirebaseContext.Consumer>
             {(context) => (
@@ -15,9 +17,9 @@ const QuickRecordTable = () => {
                         )) : <h1>Loading...</h1>}
                     </div>
                     <div>
-                        {context.players.map((x, index) => (
+                        {players ? players.map((x, index) => (
                             <PlayerRow playerName={x} darkGray={(index % 2 === 1)} key={index} />
-                        ))}
+                        )) : <div>Loading...</div>}
                     </div>
                 </div>
             )}

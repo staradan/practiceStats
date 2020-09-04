@@ -1,5 +1,5 @@
 import * as firebase from "firebase";
-import firestore from "firebase/firestore";
+//import firestore from "firebase/firestore";
 import app from "firebase/app";
 
 const config = {
@@ -18,21 +18,25 @@ class Firebase {
     app.initializeApp(config);
     this.db = firebase.firestore();
   }
-  getAllPlayers = () => {
-    let players = [];
-    this.db.collection("players").get().then(function (querySnapshot) {
-      querySnapshot.forEach(function (doc) {
-        let player = {
-          teamID: doc.data().teamID,
-          playerName: doc.data().playerName,
-          playerID: doc.data().playerID,
-          stats: [],
-        }
-        players.push(player);
-      });
-    });
-    return players;
+  getTimestamp(date) {
+    console.log(this.db);
+    return firebase.firestore.Timestamp.fromDate(date);
   }
+  // getAllPlayers = () => {
+  //   let players = [];
+  //   this.db.collection("players").get().then(function (querySnapshot) {
+  //     querySnapshot.forEach(function (doc) {
+  //       let player = {
+  //         teamID: doc.data().teamID,
+  //         playerName: doc.data().playerName,
+  //         playerID: doc.data().playerID,
+  //         stats: [],
+  //       }
+  //       players.push(player);
+  //     });
+  //   });
+  //   return players;
+  // }
   updateDateShown = (date) => {
     return -1;
   }
