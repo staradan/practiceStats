@@ -1,6 +1,4 @@
 import React from 'react';
-import NamedProgressBar from './aggregateCardViz/namedProgressBar';
-import NumberComparison from './aggregateCardViz/numberComparison';
 
 function AggregateStatCard(props) {
     return (

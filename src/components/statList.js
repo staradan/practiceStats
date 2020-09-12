@@ -1,5 +1,4 @@
 import React from 'react';
-import QuickViewPlayerCard from '../components/quickViewPlayerCard';
 import { connect } from 'react-redux';
 
 const mapStateToProps = state => {

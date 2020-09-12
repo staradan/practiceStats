@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import axios from 'axios';
 import { addPlayer } from '../js/actions/index';
 import { connect } from 'react-redux';
 import firebase from 'firebase';
@@ -52,21 +51,6 @@ const AddPlayerForm = ({ addPlayer }) => {
                 />
             </form>
         </div>
-
-
-        // <div className="mb-6 mt-4">
-        //     <p className="text-sm font-bold mb-1">Add A New Player</p>
-        //     <form onSubmit={handleSubmit}>
-        //         <input
-        //             className="border-b"
-        //             placeholder="Enter full name here"
-        //             type="text"
-        //             value={playerName}
-        //             onChange={e => setName(e.target.value)}
-        //         />
-        //         <button className="text-blue-600 font-bold ml-3" type="submit">Add</button>
-        //     </form>
-        // </div>
     );
 }
 

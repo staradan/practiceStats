@@ -1,26 +1,32 @@
-import React, { useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Route, Switch, BrowserRouter as Router } from 'react-router-dom'
 import TakeStats from './pages/takeStats';
 import ViewInsights from './pages/viewInsights';
 import ManageTeam from './pages/manageTeam';
 import Home from './pages/home';
-import { addStat, addPlayer } from './js/actions/index';
-import { connect } from 'react-redux';
-import firebase from 'firebase';
-import * as Cruncher from './numberCrunchers';
+import Firebase, { FirebaseContext } from './firebase';
+const globalDate = new Date();
+const globalFirebase = new Firebase();
 
-function mapDispatchToProps(dispatch) {
-  return {
-    addStat: stat => dispatch(addStat(stat)),
-    addPlayer: player => dispatch(addPlayer(player))
-  };
-}
 
-const App = function ({ addStat, addPlayer }) {
 
-  useEffect(() => {
-    const db = firebase.firestore();
-    db.collection("players").get().then(function (querySnapshot) {
+
+const App = function () {
+  const [players, setPlayers] = useState([]);
+  const [sport] = useState('Baseball');
+  const [days, setDay] = useState([]);
+  const [currentWeek, updateCurrentWeek] = useState([]);
+  const [setStats] = useState([]);
+  const [dateShown, setDate] = useState(globalDate);
+  const addAdditionalPlayer = (player) => { setPlayers(players => players.concat(player)) };
+  const addAdditionalDay = (dayString) => { setDay(days => days.concat(dayString)) };
+  const deleteStat = (stat) => { setDay(stats => stats.filter(obj => obj.statID !== stat.statID)) }
+
+
+  const changeDate = (value) => { setDate(value) }
+
+  const getPlayers = () => {
+    globalFirebase.db.collection("players").get().then(function (querySnapshot) {
       querySnapshot.forEach(function (doc) {
         let player = {
           teamID: doc.data().teamID,
@@ -28,28 +34,41 @@ const App = function ({ addStat, addPlayer }) {
           playerID: doc.data().playerID,
           stats: [],
         }
-        addPlayer({ player });
+        addAdditionalPlayer(player.playerName);
+        players.push(player);
       });
     });
-    //check if the stat is today..
-    db.collection("stats").get().then(function (querySnapshot) {
-      querySnapshot.forEach(function (doc) {
-        let statDay = new Date(doc.data().createdAt.seconds * 1000);
-        if (Cruncher.datesAreInRange(statDay, new Date(), 'day')) {
-          let stat = {
-            playerName: doc.data().playerName,
-            createdAt: doc.data().createdAt,
-            statName: doc.data().statName,
-            isPositive: doc.data().isPositive,
-            statID: doc.data().statID,
-          }
-          addStat({ stat });
-        }
-      });
-    });
-  }, [addStat, addPlayer]);
+  }
+
+  useEffect(() => {
+    getPlayers();
+  }, []);
+
   return (
-    <div>
+    <FirebaseContext.Provider value={{
+      firebase: globalFirebase,
+      dateShown,
+      changeDate,
+      sport,
+      school: 'Nebraska',
+      categories: [
+        'Throwing',
+        'Fielding',
+        'Picks',
+        'Awareness',
+        'Competitive',
+        'Diving',
+        'Ball On Ground',
+      ],
+      days,
+      setDay,
+      currentWeek,
+      updateCurrentWeek,
+      addAdditionalDay,
+      deleteStat,
+      players,
+      addAdditionalPlayer,
+    }}>
       <Router>
         <Switch>
           <Route path="/" exact component={Home} />
@@ -58,14 +77,14 @@ const App = function ({ addStat, addPlayer }) {
           <Route path="/manage" component={ManageTeam} />
         </Switch>
       </Router>
-    </div>
+    </FirebaseContext.Provider>
   );
 }
 
 
-const WholeApp = connect(
-  null,
-  mapDispatchToProps
-)(App);
+// const WholeApp = connect(
+//   null,
+//   mapDispatchToProps
+// )(App);
 
-export default WholeApp;
+export default App;
