@@ -26,11 +26,20 @@ const Home = (props) => {
             });
             setDay(stats);
         });
-        //return stats
     }
 
-    async function getWeekStats(dateObj) {
+    async function getWeekStats() {
+        let curr = dateShown;
+        let week = []
 
+        //get all the dates in the week
+        for (let i = 1; i <= 7; i++) {
+            let first = curr.getDate() - curr.getDay() + i
+            let day = new Date(curr.setDate(first))
+            week.push(day)
+        }
+
+        console.log(week);
     }
 
     async function getMonthStats(dateObj) {
@@ -41,6 +50,7 @@ const Home = (props) => {
         changeDate(value);
         console.log('date', Cruncher.dateToString(value));
         getDayStats(Cruncher.dateToString(value));
+        getWeekStats();
     }
 
     useEffect(() => {
