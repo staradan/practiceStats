@@ -5,14 +5,14 @@ import ViewInsights from './pages/viewInsights';
 import ManageTeam from './pages/manageTeam';
 import Home from './pages/home';
 import Firebase, { FirebaseContext } from './firebase';
-const globalDate = new Date();
+import * as Cruncher from './numberCrunchers/index';
+const globalDate = new Date(2020, 8, 9);
 const globalFirebase = new Firebase();
-
-
 
 
 const App = function () {
   const [players, setPlayers] = useState([]);
+  //const addStatToPlayer = 
   const [sport] = useState('Baseball');
   const [days, setDay] = useState([]);
   const [currentWeek, updateCurrentWeek] = useState([]);
@@ -32,13 +32,39 @@ const App = function () {
           teamID: doc.data().teamID,
           playerName: doc.data().playerName,
           playerID: doc.data().playerID,
-          stats: [],
+          positiveStats: [],
+          negativeStats: [],
         }
-        addAdditionalPlayer(player.playerName);
+        addAdditionalPlayer(player);
         players.push(player);
       });
+      let dayString = Cruncher.dateToString(globalDate);
+      getDayStats(dayString);
     });
   }
+
+
+  async function getDayStats(dayString) {
+    let stats = [];
+
+    globalFirebase.db.collection(dayString).get().then(function (querySnapshot) {
+      querySnapshot.forEach(function (doc) {
+        let stat = {
+          playerName: doc.data().playerName,
+          createdAt: doc.data().createdAt,
+          statName: doc.data().statName,
+          isPositive: doc.data().isPositive,
+          statID: doc.data().statID,
+        }
+        stats.push(stat);
+        //add the stats to the player object..
+
+
+      });
+      setDay(stats);
+    });
+  }
+
 
   useEffect(() => {
     getPlayers();

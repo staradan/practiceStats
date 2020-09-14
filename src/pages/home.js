@@ -23,6 +23,9 @@ const Home = (props) => {
                     statID: doc.data().statID,
                 }
                 stats.push(stat);
+
+                //add the stats to the player object..
+
             });
             setDay(stats);
         });
@@ -55,8 +58,8 @@ const Home = (props) => {
 
     useEffect(() => {
         //getPlayers();
-        let date = Cruncher.dateToString(dateShown);
-        getDayStats(date);
+        //let date = Cruncher.dateToString(dateShown);
+        //getDayStats(date);
     }, []);
 
     return (

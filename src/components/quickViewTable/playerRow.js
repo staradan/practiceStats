@@ -14,6 +14,7 @@ const PlayerRow = ({ playerName, darkGray }) => {
                             {playerName}
                         </h1>
                     </div>
+                    <PlusMinusBox rowBackgroundColor={rowBackgroundColor} playerName={playerName} key="overall" statName="Overall" />
                     {context.days != null ? context.categories.map((statName, index) => (
                         <PlusMinusBox rowBackgroundColor={rowBackgroundColor} playerName={playerName} key={index} statName={statName} />
                     )) : <h1>Loading...</h1>}
