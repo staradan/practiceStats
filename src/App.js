@@ -6,7 +6,7 @@ import ManageTeam from './pages/manageTeam';
 import Home from './pages/home';
 import Firebase, { FirebaseContext } from './firebase';
 import * as Cruncher from './numberCrunchers/index';
-const globalDate = new Date(2020, 8, 9);
+const globalDate = new Date();
 const globalFirebase = new Firebase();
 
 
