@@ -5,6 +5,8 @@ import { FirebaseContext } from '../../firebase'
 
 const QuickRecordTable = () => {
     const { players } = useContext(FirebaseContext);
+
+    //console.log(players.sort(function (a, b) { return a > b ? 1 : -1 }));
     return (
         <FirebaseContext.Consumer>
             {(context) => (
@@ -18,7 +20,7 @@ const QuickRecordTable = () => {
                     </div>
                     <div>
                         {players ? players.map((x, index) => (
-                            <PlayerRow playerName={x.playerName} darkGray={(index % 2 === 1)} key={index} />
+                            <PlayerRow player={x} darkGray={(index % 2 === 1)} key={index} />
                         )) : <div>Loading...</div>}
                     </div>
                 </div>

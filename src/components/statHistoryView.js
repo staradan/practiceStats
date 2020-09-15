@@ -6,15 +6,14 @@ import { FirebaseContext } from '../firebase';
 import * as Cruncher from '../numberCrunchers';
 
 function StatHistoryView() {
-    const { days } = useContext(FirebaseContext);
-    const today = new Date();
+    const { days, globalDate } = useContext(FirebaseContext);
     const getTodayStats = () => {
         let todayStats = []
         //TODO need to update this one here
         if (days) {
             days.map(x => {
                 let statDay = new Date(x.createdAt.seconds * 1000);
-                if (Cruncher.datesAreInRange(statDay, today, 'day')) {
+                if (Cruncher.datesAreInRange(statDay, new Date(), 'day')) {
                     todayStats.push(x);
                 }
                 return null;

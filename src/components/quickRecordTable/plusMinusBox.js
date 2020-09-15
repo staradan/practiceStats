@@ -16,14 +16,12 @@ function mapDispatchToProps(dispatch) {
 
 
 const PlusMinusBox = ({ playerName, statName, rowBackgroundColor }) => {
-    const { addAdditionalDay, firebase, stats } = useContext(FirebaseContext);
+    const { addAdditionalDay, firebase } = useContext(FirebaseContext);
     const minusColor = (statName === 'Competitive' || statName === 'Diving') ? 'text-orange-400' : 'text-red-500';
 
 
     const addNewStat = (name, statName, isPositive, addStat) => {
-        let date = new Date()
-        let dayString = Cruncher.dateToString(date);
-
+        let dayString = Cruncher.dateToString(new Date());
         const stat = {
             statName: statName,
             isPositive: isPositive,

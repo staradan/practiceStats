@@ -7,11 +7,16 @@ import { FirebaseContext } from '../firebase';
 import * as Cruncher from '../numberCrunchers/index';
 
 const Home = (props) => {
-    const { days, firebase, dateShown, changeDate, setDay } = useContext(FirebaseContext);
-
+    const { setPlayers, firebase, dateShown, changeDate, setDay, players } = useContext(FirebaseContext);
 
     async function getDayStats(dayString) {
         let stats = [];
+
+        players.forEach(player => {
+            player.neutralStats = [];
+            player.negativeStats = [];
+            player.positiveStats = [];
+        })
 
         firebase.db.collection(dayString).get().then(function (querySnapshot) {
             querySnapshot.forEach(function (doc) {
@@ -24,9 +29,30 @@ const Home = (props) => {
                 }
                 stats.push(stat);
 
-                //add the stats to the player object..
+                players.forEach(player => {
+                    if (player.playerName === doc.data().playerName) {
+                        if (doc.data().statName === 'Diving') {  //get neutrals
+                            player.neutralStats.push(stat);
+                        } else if (doc.data().statName === 'Competitive' && !doc.data().isPositive) {
+                            player.neutralStats.push(stat);
+                        } else if (doc.data().isPositive) {
+                            player.positiveStats.push(stat);
+                        } else {   //get negatives
+                            player.negativeStats.push(stat);
+                        }
+                    }
+                });
 
             });
+            players.forEach(player => {
+                let totalStats = player.positiveStats.length + player.negativeStats.length + player.neutralStats.length;
+                player.successPercentage =
+                    totalStats > 0 && player.positiveStats.length > 0 ? (player.positiveStats.length / totalStats).toFixed(2) * 100 : 0;
+            });
+
+            setPlayers(players.sort(function (a, b) {
+                return b.successPercentage - a.successPercentage;
+            }))
             setDay(stats);
         });
     }

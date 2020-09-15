@@ -12,7 +12,25 @@ const globalFirebase = new Firebase();
 
 const App = function () {
   const [players, setPlayers] = useState([]);
-  //const addStatToPlayer = 
+  const addStatToPlayer = (stat) => {
+    setPlayers(players => {
+      if (players) {
+        players.forEach(player => {
+          if (player.playerName === stat.playerName) {
+            if (stat.statName === 'Diving') {  //get neutrals
+              player.neutralStats = [...player.neutralStats, stat];
+            } else if (stat.statName === 'Competitive' && !stat.isPositive) {
+              player.neutralStats = [...player.neutralStats, stat];
+            } else if (stat.isPositive) {
+              player.positiveStats = [...player.positiveStats, stat];
+            } else {   //get negatives
+              player.negativeStats = [...player.negativeStats, stat];
+            }
+          }
+        });
+      }
+    })
+  };
   const [sport] = useState('Baseball');
   const [days, setDay] = useState([]);
   const [currentWeek, updateCurrentWeek] = useState([]);
@@ -34,6 +52,8 @@ const App = function () {
           playerID: doc.data().playerID,
           positiveStats: [],
           negativeStats: [],
+          neutralStats: [],
+          successPercentage: -1,
         }
         addAdditionalPlayer(player);
         players.push(player);
@@ -57,10 +77,31 @@ const App = function () {
           statID: doc.data().statID,
         }
         stats.push(stat);
-        //add the stats to the player object..
-
-
+        //addStatToPlayer(stat);
+        players.forEach(player => {
+          if (player.playerName === doc.data().playerName) {
+            if (doc.data().statName === 'Diving') {  //get neutrals
+              player.neutralStats.push(stat);
+            } else if (doc.data().statName === 'Competitive' && !doc.data().isPositive) {
+              player.neutralStats.push(stat);
+            } else if (doc.data().isPositive) {
+              player.positiveStats.push(stat);
+            } else {   //get negatives
+              player.negativeStats.push(stat);
+            }
+          }
+        });
       });
+
+      players.forEach(player => {
+        let totalStats = player.positiveStats.length + player.negativeStats.length + player.neutralStats.length;
+        player.successPercentage =
+          totalStats > 0 && player.positiveStats.length > 0 ? (player.positiveStats.length / totalStats).toFixed(2) * 100 : 0;
+      });
+
+      setPlayers(players.sort(function (a, b) {
+        return b.successPercentage - a.successPercentage;
+      }))
       setDay(stats);
     });
   }
@@ -74,6 +115,7 @@ const App = function () {
     <FirebaseContext.Provider value={{
       firebase: globalFirebase,
       dateShown,
+      dayString: Cruncher.dateToString(globalDate),
       changeDate,
       sport,
       school: 'Nebraska',
@@ -93,6 +135,7 @@ const App = function () {
       addAdditionalDay,
       deleteStat,
       players,
+      setPlayers,
       addAdditionalPlayer,
     }}>
       <Router>

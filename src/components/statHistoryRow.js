@@ -8,8 +8,7 @@ const StatHistoryRow = (props) => {
     const { deleteStat, firebase } = useContext(FirebaseContext);
 
     function deleteStatFromDatabase(statID) {
-        let day = new Date();
-        let dayString = Cruncher.dateToString(day);
+        let dayString = Cruncher.dateToString(new Date());
         var jobskill_query = firebase.db.collection(dayString).where('statID', '==', statID);
         jobskill_query.get().then(function (querySnapshot) {
             querySnapshot.forEach(function (doc) {
