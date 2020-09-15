@@ -12,7 +12,7 @@ const QuickRecordTable = () => {
             {(context) => (
                 <div className="rounded-sm border border-gray-400 shadow relative w-full overflow-auto bg-gray-300">
                     <div className="relative flex items-center w-test">
-                        <div className="w-40 sticky left-0 flex-none font-semibold text-sm text-gray-700 bg-gray-400 border-gray-600 border-r-2 text-left px-4 big-width">Name</div>
+                        <div className="w-1/12 sticky left-0 flex-none font-semibold text-sm text-gray-700 bg-gray-400 border-gray-600 border-r-2 text-left px-4 big-width">Name</div>
                         <ColumnHeader statName="Overall" key="overall" />
                         {context.categories != null ? context.categories.map((statName, index) => (
                             <ColumnHeader statName={statName} key={index} />

@@ -5,11 +5,12 @@ import { FirebaseContext } from '../firebase';
 import * as Cruncher from '../numberCrunchers/index'
 
 const StatHistoryRow = (props) => {
-    const { deleteStat, firebase } = useContext(FirebaseContext);
-
-    function deleteStatFromDatabase(statID) {
+    const { deleteStat, firebase, players, deletePositiveStat, setPlayers, setDay } = useContext(FirebaseContext);
+    let stats = [];
+    //look at the 
+    function deleteStatFromDatabase(props) {
         let dayString = Cruncher.dateToString(new Date());
-        var jobskill_query = firebase.db.collection(dayString).where('statID', '==', statID);
+        var jobskill_query = firebase.db.collection(dayString).where('statID', '==', props.statID);
         jobskill_query.get().then(function (querySnapshot) {
             querySnapshot.forEach(function (doc) {
                 doc.ref.delete();
@@ -27,7 +28,7 @@ const StatHistoryRow = (props) => {
                     <div className="w-2/5 rounded-sm text-left pr-2 font-semibold text-sm text-gray-700 overflow-x-hidden whitespace-no-wrap">{props.playerName}</div>
                     <div className={"w-2/5 text-left ml-2 pr-2 overflow-x-hidden font-semibold text-sm whitespace-no-wrap text-center " + statTextColor}>{statDecorator + props.playerStatistic}</div>
                     <button className="w-1/5 rounded-sm text-center" onClick={() => {
-                        deleteStatFromDatabase(props.statID);
+                        deleteStatFromDatabase(props);
                     }}>
                         <FontAwesomeIcon icon={faUndo} />
                     </button>

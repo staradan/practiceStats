@@ -17,7 +17,7 @@ const QuickRecordTable = () => {
                         )) : <h1>Loading...</h1>}
                     </div>
                     <div>
-                        {players ? players.sort().map((x, index) => (
+                        {players ? players.sort((a, b) => { return a.playerName - b.playerName }).map((x, index) => (
                             <PlayerRow playerName={x.playerName} darkGray={(index % 2 === 1)} key={index} />
                         )) : <div>Loading...</div>}
                     </div>

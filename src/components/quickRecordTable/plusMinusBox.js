@@ -16,7 +16,7 @@ function mapDispatchToProps(dispatch) {
 
 
 const PlusMinusBox = ({ playerName, statName, rowBackgroundColor }) => {
-    const { addAdditionalDay, firebase } = useContext(FirebaseContext);
+    const { addAdditionalDay, firebase, players } = useContext(FirebaseContext);
     const minusColor = (statName === 'Competitive' || statName === 'Diving') ? 'text-orange-400' : 'text-red-500';
 
 
@@ -32,7 +32,21 @@ const PlusMinusBox = ({ playerName, statName, rowBackgroundColor }) => {
         firebase.db.collection(dayString).add(stat)
             .then(function (docRef) {
                 stat.documentID = docRef.id;
+                //this adds it to the stat history view
                 addAdditionalDay(stat);
+                players.forEach(player => {
+                    if (player.playerName === stat.playerName) {
+                        if (stat.statName === 'Diving') {  //get neutrals
+                            player.neutralStats.push(stat);
+                        } else if (stat.statName === 'Competitive' && !stat.isPositive) {
+                            player.neutralStats.push(stat);
+                        } else if (stat.isPositive) {
+                            player.positiveStats.push(stat);
+                        } else {   //get negatives
+                            player.negativeStats.push(stat);
+                        }
+                    }
+                });
             })
             .catch(function (error) {
                 alert('Error. Stat was not saved');

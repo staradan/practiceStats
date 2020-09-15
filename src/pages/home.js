@@ -12,12 +12,6 @@ const Home = (props) => {
     async function getDayStats(dayString) {
         let stats = [];
 
-        players.forEach(player => {
-            player.neutralStats = [];
-            player.negativeStats = [];
-            player.positiveStats = [];
-        })
-
         firebase.db.collection(dayString).get().then(function (querySnapshot) {
             querySnapshot.forEach(function (doc) {
                 let stat = {
@@ -28,7 +22,7 @@ const Home = (props) => {
                     statID: doc.data().statID,
                 }
                 stats.push(stat);
-
+                //addStatToPlayer(stat);
                 players.forEach(player => {
                     if (player.playerName === doc.data().playerName) {
                         if (doc.data().statName === 'Diving') {  //get neutrals
@@ -42,8 +36,8 @@ const Home = (props) => {
                         }
                     }
                 });
-
             });
+
             players.forEach(player => {
                 let totalStats = player.positiveStats.length + player.negativeStats.length + player.neutralStats.length;
                 player.successPercentage =
@@ -79,7 +73,7 @@ const Home = (props) => {
         changeDate(value);
         console.log('date', Cruncher.dateToString(value));
         getDayStats(Cruncher.dateToString(value));
-        getWeekStats();
+        //getWeekStats();
     }
 
     useEffect(() => {

@@ -11,7 +11,6 @@ const globalFirebase = new Firebase();
 
 
 const App = function () {
-  const [players, setPlayers] = useState([]);
   const addStatToPlayer = (stat) => {
     setPlayers(players => {
       if (players) {
@@ -31,6 +30,7 @@ const App = function () {
       }
     })
   };
+  const [players, setPlayers] = useState([]);
   const [sport] = useState('Baseball');
   const [days, setDay] = useState([]);
   const [currentWeek, updateCurrentWeek] = useState([]);
@@ -39,6 +39,27 @@ const App = function () {
   const addAdditionalPlayer = (player) => { setPlayers(players => players.concat(player)) };
   const addAdditionalDay = (dayString) => { setDay(days => days.concat(dayString)) };
   const deleteStat = (stat) => { setDay(stats => stats.filter(obj => obj.statID !== stat.statID)) }
+
+
+
+  const removeItem = (select, index) => {
+
+    const filtered = this.state.products[select].colors.filter(
+      (color, i) => i !== index
+    );
+
+    this.setState(prevState => {
+      return {
+        select: select,
+        index: index,
+        products: [
+          ...prevState.products.slice(0, select),
+          Object.assign({}, prevState.products[select], { colors: filtered }),
+          ...prevState.products.slice(select + 1)
+        ]
+      };
+    });
+  };
 
 
   const changeDate = (value) => { setDate(value) }

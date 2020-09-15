@@ -42,7 +42,7 @@ const PlusMinusBox = ({ player, statName, rowBackgroundColor }) => {
             <FirebaseContext.Consumer>
                 {(context) => (
                     <div className={"w-1/12 flex-none text-gray-700 border-gray-500 border-r border-gray-800 text-center " + rowBackgroundColor}>
-                        <button className="inline w-3/12 flex-none px-2 py-4 border-r">
+                        <button className="inline w-4/12 flex-none px-2 py-4 border-r">
                             <h1 className={player.positiveStats.length > 0 ? 'font-bold text-blue-500' : 'text-gray-500'}>{player.positiveStats.length}</h1>
                         </button>
                         <button className="inline w-3/12 flex-none px-2 py-4 border-r">
@@ -62,7 +62,7 @@ const PlusMinusBox = ({ player, statName, rowBackgroundColor }) => {
             <FirebaseContext.Consumer>
                 {(context) => (
                     <div className={"w-1/12 flex-none text-gray-700 border-gray-500 border-r border-gray-800 text-center " + rowBackgroundColor}>
-                        <button className="inline w-3/12 flex-none px-2 py-4 border-r">
+                        <button className="inline w-4/12 flex-none px-2 py-4 border-r">
                             <h1 className={posAndNegStats()[0] > 0 ? 'font-bold text-blue-500' : 'text-gray-500'}>{posAndNegStats()[0]}</h1>
                         </button>
                         <button className="inline w-3/12 flex-none px-2 py-4 border-r">
