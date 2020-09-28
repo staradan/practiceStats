@@ -1,86 +1,68 @@
 import React, { useEffect, useContext, useCallback } from 'react';
-import HomeToolbar from '../components/homeToolbar';
+import HomeToolbar from '../components/header';
 import Footer from '../components/footer'
 import QuickViewTable from '../components/quickViewTable/quickViewTable';
 import { DatePicker } from 'react-rainbow-components';
 import { FirebaseContext } from '../firebase';
 import * as Cruncher from '../numberCrunchers/index';
 
+const stringifyDate = (date) => {
+    return date.getFullYear() + ',' + (date.getMonth() + 1) + ',' + date.getDate()
+}
+
 const Home = (props) => {
-    const { setPlayers, firebase, dateShown, changeDate, setDay, players } = useContext(FirebaseContext);
+    const { setStats, dateShown, changeDate, callAllPlayers, setPlayers, callStatsInDay, callStatsInPeriod, dateRange, setDateRange } = useContext(FirebaseContext);
 
-    async function getDayStats(dayString) {
-        let stats = [];
-
-        firebase.db.collection(dayString).get().then(function (querySnapshot) {
-            querySnapshot.forEach(function (doc) {
-                let stat = {
-                    playerName: doc.data().playerName,
-                    createdAt: doc.data().createdAt,
-                    statName: doc.data().statName,
-                    isPositive: doc.data().isPositive,
-                    statID: doc.data().statID,
-                }
-                stats.push(stat);
-                //addStatToPlayer(stat);
-                players.forEach(player => {
-                    if (player.playerName === doc.data().playerName) {
-                        if (doc.data().statName === 'Diving') {  //get neutrals
-                            player.neutralStats.push(stat);
-                        } else if (doc.data().statName === 'Competitive' && !doc.data().isPositive) {
-                            player.neutralStats.push(stat);
-                        } else if (doc.data().isPositive) {
-                            player.positiveStats.push(stat);
-                        } else {   //get negatives
-                            player.negativeStats.push(stat);
-                        }
-                    }
-                });
-            });
-
-            players.forEach(player => {
-                let totalStats = player.positiveStats.length + player.negativeStats.length + player.neutralStats.length;
-                player.successPercentage =
-                    totalStats > 0 && player.positiveStats.length > 0 ? (player.positiveStats.length / totalStats).toFixed(2) * 100 : 0;
-            });
-
-            setPlayers(players.sort(function (a, b) {
-                return b.successPercentage - a.successPercentage;
-            }))
-            setDay(stats);
-        });
+    const getDayData = (value) => {
+        let dateString = stringifyDate(value);
+        callStatsInDay({ startDate: dateString }).then(result => setStats(result.data));
     }
 
-    async function getWeekStats() {
-        let curr = dateShown;
-        let week = []
+    const getWeekData = (value) => {
+        let tempDay = new Date();
+        let otherDay = new Date();
 
-        //get all the dates in the week
-        for (let i = 1; i <= 7; i++) {
-            let first = curr.getDate() - curr.getDay() + i
-            let day = new Date(curr.setDate(first))
-            week.push(day)
-        }
+        //calculate the first day based on where we are
+        let differenceToMonday = value.getDay();
+        tempDay.setDate(value.getDate() - differenceToMonday);
+        let firstDateString = stringifyDate(tempDay);
 
-        console.log(week);
+        //calculate the second day based on where we are
+        let differenceToFriday = 6 - value.getDay();
+        otherDay.setDate(value.getDate() + differenceToFriday);
+        let lastDateString = stringifyDate(otherDay);
+
+        callStatsInPeriod({ startDate: firstDateString, endDate: lastDateString }).then(result => setStats(result.data));
     }
 
-    async function getMonthStats(dateObj) {
+    const getMonthData = (value) => {
+        var date = new Date();
+        var firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
+        let firstDateString = stringifyDate(firstDay);
 
+        var lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+        let lastDateString = stringifyDate(lastDay);
+
+        callStatsInPeriod({ startDate: firstDateString, endDate: lastDateString }).then(result => setStats(result.data));
     }
+    //get the team's players and the day's stats
+    useEffect(() => {
+        let dateString = dateShown.getFullYear() + ',' + (dateShown.getMonth() + 1) + ',' + dateShown.getDate();
+        callStatsInDay({ startDate: dateString }).then(result => setStats(result.data));
+        callAllPlayers().then(result => setPlayers(result.data));
+    }, []);
 
     const updateDate = value => {
         changeDate(value);
-        console.log('date', Cruncher.dateToString(value));
-        getDayStats(Cruncher.dateToString(value));
-        //getWeekStats();
+        //if the range is 7, convert the first date to Monday and last day to Friday
+        if (dateRange === 1) {
+            getDayData(value);
+        } else if (dateRange === 7) {
+            getWeekData(value);
+        } else if (dateRange === 31) {
+            getMonthData(value);
+        }
     }
-
-    useEffect(() => {
-        //getPlayers();
-        //let date = Cruncher.dateToString(dateShown);
-        //getDayStats(date);
-    }, []);
 
     return (
         <FirebaseContext.Consumer>
@@ -98,6 +80,26 @@ const Home = (props) => {
                                     onChange={value => updateDate(value)}
                                 />
                             </div>
+                            <div className="mb-4 text-center">
+                                <button onClick={() => {
+                                    setDateRange(1);
+                                    getDayData(dateShown);
+                                }} className={"shadow mx-4 font-bold py-2 px-4 rounded " + (dateRange === 1 ? 'text-red-600' : 'text-black')}>
+                                    Day
+                                </button>
+                                <button onClick={() => {
+                                    setDateRange(7);
+                                    getWeekData(dateShown);
+                                }} className={"shadow mx-4 font-bold py-2 px-4 rounded " + (dateRange === 7 ? 'text-red-600' : 'text-black')}>
+                                    Week
+                                 </button>
+                                <button onClick={() => {
+                                    setDateRange(31);
+                                    getMonthData(dateShown);
+                                }} className={"shadow mx-4 font-bold py-2 px-4 rounded " + (dateRange === 31 ? 'text-red-600' : 'text-black')}>
+                                    Month
+                                </button>
+                            </div>
                             <QuickViewTable />
                         </div>
                         < Footer />
@@ -110,54 +112,3 @@ const Home = (props) => {
 }
 
 export default Home;
-
-
-
-
-
-    // const getWeekWorthOfStats = () => {
-    //     //let dayOfWeek = dateShown.getDay();
-    //     let sunday = 0;
-    //     let saturday = 6;
-    //     let stats = [];
-    //     let day = dateShown;
-    //     let dateString = Cruncher.dateToString(day);
-    //     let statsAlreadyExist = false;
-    //     //console.log('..', dayOfWeek);
-    //     days.map(x => {
-    //         if (x.date === dateString) {
-    //             statsAlreadyExist = true;
-    //             console.log('had it!');
-    //         }
-    //     })
-    //     if (!statsAlreadyExist) {
-    //         for (let i = sunday; i <= saturday; i++) {
-    //             //make a day for that day 
-    //             let day = dateShown;
-    //             let dateString = Cruncher.dateToString(day);
-
-    //             var currentDay = day.getDay();
-    //             var distance = i - currentDay;
-    //             day.setDate(day.getDate() + distance);
-    //             console.log(i, days);
-
-    //             //add the day's stats to the context
-    //             firebase.db.collection(Cruncher.dateToString(day)).get().then(function (querySnapshot) {
-    //                 querySnapshot.forEach(function (doc) {
-    //                     let stat = {
-    //                         playerName: doc.data().playerName,
-    //                         createdAt: doc.data().createdAt,
-    //                         statName: doc.data().statName,
-    //                         isPositive: doc.data().isPositive,
-    //                         statID: doc.data().statID,
-    //                     }
-    //                     stats.push(stat);
-    //                 });
-    //                 addAdditionalDay({ date: dateString, stats: stats });
-    //                 updateCurrentWeek(stats);
-    //                 // console.log('week', currentWeek, stats);
-    //             });
-    //             //getDayStats(Cruncher.dateToString(day));
-    //         }
-    //     }
-    //}

@@ -18,6 +18,7 @@ class Firebase {
     app.initializeApp(config);
     this.db = firebase.firestore();
     this.analytics = firebase.analytics();
+    this.functions = firebase.functions();
   }
   getTimestamp(date) {
     return firebase.firestore.Timestamp.fromDate(date);

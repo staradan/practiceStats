@@ -1,17 +1,15 @@
 import React, { useContext } from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUndo } from "@fortawesome/free-solid-svg-icons";
-import { FirebaseContext } from '../firebase';
-import * as Cruncher from '../numberCrunchers/index'
+import { FirebaseContext } from '../../firebase';
+import * as Cruncher from '../../numberCrunchers/index'
 
 const StatHistoryRow = (props) => {
     const { deleteStat, firebase, players, deletePositiveStat, setPlayers, setDay } = useContext(FirebaseContext);
-    let stats = [];
-    //look at the 
+
     function deleteStatFromDatabase(props) {
-        let dayString = Cruncher.dateToString(new Date());
-        var jobskill_query = firebase.db.collection(dayString).where('statID', '==', props.statID);
-        jobskill_query.get().then(function (querySnapshot) {
+        var results = firebase.db.collection('allStats').where('statID', '==', props.statID);
+        results.get().then(function (querySnapshot) {
             querySnapshot.forEach(function (doc) {
                 doc.ref.delete();
             });

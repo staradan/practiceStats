@@ -3,8 +3,14 @@ body{
 }
 
 .w-test {
-    width: 450vw;
+    width: 49rem;
+}
+.w-view {
+    width: 80rem;
 }
 .mb-80 {
     margin-bottom: 24rem;
+}
+.w-28 {
+    width: 7rem;
 }

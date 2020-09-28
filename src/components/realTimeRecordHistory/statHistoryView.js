@@ -2,36 +2,36 @@ import React, { useContext } from 'react';
 import StatHistoryRow from './statHistoryRow';
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { FirebaseContext } from '../firebase';
-import * as Cruncher from '../numberCrunchers';
+import { FirebaseContext } from '../../firebase';
+import * as Cruncher from '../../numberCrunchers';
 
 function StatHistoryView() {
-    const { days, globalDate } = useContext(FirebaseContext);
-    const getTodayStats = () => {
-        let todayStats = []
-        //TODO need to update this one here
-        if (days) {
-            days.map(x => {
-                let statDay = new Date(x.createdAt.seconds * 1000);
-                if (Cruncher.datesAreInRange(statDay, new Date(), 'day')) {
-                    todayStats.push(x);
-                }
-                return null;
-            });
-        }
+    const { stats } = useContext(FirebaseContext);
+    // const getTodayStats = () => {
+    //     let todayStats = []
+    //     //TODO need to update this one here
+    //     if (days) {
+    //         days.map(x => {
+    //             let statDay = new Date(x.createdAt.seconds * 1000);
+    //             if (Cruncher.datesAreInRange(statDay, new Date(), 'day')) {
+    //                 todayStats.push(x);
+    //             }
+    //             return null;
+    //         });
+    //     }
 
-        return todayStats;
-    }
+    //     return todayStats;
+    // }
 
-    let todayStats = getTodayStats()
+    // let todayStats = getTodayStats()
 
-    if (todayStats.length > 0) {
+    if (stats.length > 0) {
         return (
             <FirebaseContext.Consumer>
                 {(context) => (
                     <div className="w-full text-center h-48 overflow-y-scroll rounded-sm shadow">
                         {
-                            todayStats.slice(0).reverse().map((stat, index) => (
+                            stats.slice(0).reverse().map((stat, index) => (
                                 <StatHistoryRow
                                     playerName={stat.playerName}
                                     playerStatistic={stat.statName}

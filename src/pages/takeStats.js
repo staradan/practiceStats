@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import QuickRecordTable from '../components/quickRecordTable/quickRecordTable';
-import StatHistoryView from '../components/statHistoryView';
+import StatHistoryView from '../components/realTimeRecordHistory/statHistoryView';
 import Footer from '../components/footer'
 import { Link } from 'react-router-dom';
 
