@@ -36,11 +36,10 @@ const Home = (props) => {
     }
 
     const getMonthData = (value) => {
-        var date = new Date();
-        var firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
+        var firstDay = new Date(value.getFullYear(), value.getMonth(), 1);
         let firstDateString = stringifyDate(firstDay);
 
-        var lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+        var lastDay = new Date(value.getFullYear(), value.getMonth() + 1, 0);
         let lastDateString = stringifyDate(lastDay);
 
         callStatsInPeriod({ startDate: firstDateString, endDate: lastDateString }).then(result => setStats(result.data));
