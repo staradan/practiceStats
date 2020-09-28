@@ -4,7 +4,6 @@ import Footer from '../components/footer'
 import QuickViewTable from '../components/quickViewTable/quickViewTable';
 import { DatePicker } from 'react-rainbow-components';
 import { FirebaseContext } from '../firebase';
-import * as Cruncher from '../numberCrunchers/index';
 
 const stringifyDate = (date) => {
     return date.getFullYear() + ',' + (date.getMonth() + 1) + ',' + date.getDate()
@@ -19,8 +18,8 @@ const Home = (props) => {
     }
 
     const getWeekData = (value) => {
-        let tempDay = new Date();
-        let otherDay = new Date();
+        let tempDay = value;
+        let otherDay = value;
 
         //calculate the first day based on where we are
         let differenceToMonday = value.getDay();
