@@ -5,7 +5,7 @@ import { FirebaseContext } from '../../firebase';
 import * as Cruncher from '../../numberCrunchers/index'
 
 const StatHistoryRow = (props) => {
-    const { deleteStat, firebase, players, deletePositiveStat, setPlayers, setDay } = useContext(FirebaseContext);
+    const { deleteStat, firebase } = useContext(FirebaseContext);
 
     function deleteStatFromDatabase(props) {
         var results = firebase.db.collection('allStats').where('statID', '==', props.statID);

@@ -16,7 +16,7 @@ const QuickRecordTable = () => {
                         )) : <h1>Loading...</h1>}
                     </div>
                     <div>
-                        {players ? players.map((x, num) => (
+                        {players ? players.sort((a, b) => a.playerName.localeCompare(b.playerName)).map((x, num) => (
                             <div key={num} className="flex items-center w-test">
                                 <div className={"w-32 flex-none sticky left-0 flex-none border-gray-600 border-r-2 text-gray-700 text-left px-4 py-4 overflow-hidden flex-no-wrap " + ((num % 2 === 0) ? 'bg-gray-200' : 'bg-white')} >
                                     <h1 className="whitespace-no-wrap">

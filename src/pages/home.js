@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, useCallback } from 'react';
+import React, { useEffect, useContext, useState } from 'react';
 import HomeToolbar from '../components/header';
 import Footer from '../components/footer'
 import QuickViewTable from '../components/quickViewTable/quickViewTable';
@@ -9,17 +9,38 @@ const stringifyDate = (date) => {
     return date.getFullYear() + ',' + (date.getMonth() + 1) + ',' + date.getDate()
 }
 
-const Home = (props) => {
-    const { setStats, dateShown, changeDate, callAllPlayers, setPlayers, callStatsInDay, callStatsInPeriod, dateRange, setDateRange } = useContext(FirebaseContext);
 
-    const getDayData = (value) => {
-        let dateString = stringifyDate(value);
-        callStatsInDay({ startDate: dateString }).then(result => setStats(result.data));
+const Home = (props) => {
+    const { setStats, setViewOnlyStats, newGetStatsInPeriod, callStatsInPeriod, dateShown, setDate, callAllPlayers, setPlayers, dateRange, setDateRange } = useContext(FirebaseContext);
+
+    /**
+     * 
+     * @param {Date} value, the date that the user has selected.
+     * 
+     * This gets the stats for the day 
+     */
+    const getDayData = async (value) => {
+        setViewOnlyStats({});
+        let currentDateString = stringifyDate(value);
+
+        var tomorrow = new Date(value);
+        await tomorrow.setDate(tomorrow.getDate() + 1);
+        let nextDateString = stringifyDate(tomorrow);
+
+        newGetStatsInPeriod({ startDate: currentDateString, endDate: nextDateString }).then(result => setViewOnlyStats(result.data));
+        callStatsInPeriod({ startDate: currentDateString, endDate: nextDateString }).then(result => { setStats(result.data); });
     }
 
+    /**
+     * 
+     * @param {Date} value, the date that has been selected
+     * 
+     * This gets the stats for the week of the value, spanning months
+     */
     const getWeekData = (value) => {
-        let tempDay = value;
-        let otherDay = value;
+        setViewOnlyStats({});
+        let tempDay = new Date(value);
+        let otherDay = new Date(value);
 
         //calculate the first day based on where we are
         let differenceToMonday = value.getDay();
@@ -31,27 +52,57 @@ const Home = (props) => {
         otherDay.setDate(value.getDate() + differenceToFriday);
         let lastDateString = stringifyDate(otherDay);
 
+        console.log(firstDateString, lastDateString);
+
+        newGetStatsInPeriod({ startDate: firstDateString, endDate: lastDateString }).then(result => setViewOnlyStats(result.data));
         callStatsInPeriod({ startDate: firstDateString, endDate: lastDateString }).then(result => setStats(result.data));
     }
 
+    /**
+     * 
+     * @param {Date} value, the selected date
+     * 
+     * Gets the stats for the value's month. 
+     */
     const getMonthData = (value) => {
+        setViewOnlyStats({});
         var firstDay = new Date(value.getFullYear(), value.getMonth(), 1);
         let firstDateString = stringifyDate(firstDay);
 
         var lastDay = new Date(value.getFullYear(), value.getMonth() + 1, 0);
         let lastDateString = stringifyDate(lastDay);
 
+        console.log(firstDateString, lastDateString);
+
+        newGetStatsInPeriod({ startDate: firstDateString, endDate: lastDateString }).then(result => setViewOnlyStats(result.data));
         callStatsInPeriod({ startDate: firstDateString, endDate: lastDateString }).then(result => setStats(result.data));
     }
-    //get the team's players and the day's stats
+
+
+
+    /**
+     * When home loads, load the current day's stats and the players
+     * TODO: the stats and players won't load if you don't view this page first and go straight to the taking stats page
+     * NOTE: the empty array passed in at the end I think makes sure it only runs once. 
+     */
     useEffect(() => {
-        let dateString = dateShown.getFullYear() + ',' + (dateShown.getMonth() + 1) + ',' + dateShown.getDate();
-        callStatsInDay({ startDate: dateString }).then(result => setStats(result.data));
-        callAllPlayers().then(result => setPlayers(result.data));
+        getDayData(dateShown);
+        callAllPlayers().then(result => {
+            result.data.map((x, index) => {
+                x.ranking = index;
+            });
+            setPlayers(result.data)
+        });
     }, []);
 
+    /**
+     * 
+     * @param {Date} value, the new date that is selected
+     * 
+     * This runs when the user updates the date with the calendar 
+     */
     const updateDate = value => {
-        changeDate(value);
+        setDate(value);
         //if the range is 7, convert the first date to Monday and last day to Friday
         if (dateRange === 1) {
             getDayData(value);

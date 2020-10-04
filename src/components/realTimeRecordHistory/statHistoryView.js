@@ -7,23 +7,6 @@ import * as Cruncher from '../../numberCrunchers';
 
 function StatHistoryView() {
     const { stats } = useContext(FirebaseContext);
-    // const getTodayStats = () => {
-    //     let todayStats = []
-    //     //TODO need to update this one here
-    //     if (days) {
-    //         days.map(x => {
-    //             let statDay = new Date(x.createdAt.seconds * 1000);
-    //             if (Cruncher.datesAreInRange(statDay, new Date(), 'day')) {
-    //                 todayStats.push(x);
-    //             }
-    //             return null;
-    //         });
-    //     }
-
-    //     return todayStats;
-    // }
-
-    // let todayStats = getTodayStats()
 
     if (stats.length > 0) {
         return (
