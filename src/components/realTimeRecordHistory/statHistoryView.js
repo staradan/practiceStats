@@ -3,7 +3,6 @@ import StatHistoryRow from './statHistoryRow';
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { FirebaseContext } from '../../firebase';
-import * as Cruncher from '../../numberCrunchers';
 
 function StatHistoryView() {
     const { stats } = useContext(FirebaseContext);

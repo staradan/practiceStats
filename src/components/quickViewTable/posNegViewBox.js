@@ -38,7 +38,7 @@ const PlusMinusBox = ({ player, statName, rowBackgroundColor, num }) => {
         return (
             <FirebaseContext.Consumer>
                 {(context) => (
-                    <div className={"w-40 flex-none text-gray-700 border-gray-500 border-r border-gray-800 text-center " + rowBackgroundColor}>
+                    <div className={"w-40 flex-none text-gray-700 border-gray-500 border-r border-gray-600 text-center " + rowBackgroundColor}>
                         <button className="inline w-4/12 flex-none px-2 py-4 border-r">
                             <h1 className={categoryPosAndNegStats()[2] > 0 ? 'font-bold text-blue-500' : 'text-gray-500'}>{categoryPosAndNegStats()[2]}</h1>
                         </button>

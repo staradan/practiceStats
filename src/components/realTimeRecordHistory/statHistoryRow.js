@@ -2,7 +2,6 @@ import React, { useContext } from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUndo } from "@fortawesome/free-solid-svg-icons";
 import { FirebaseContext } from '../../firebase';
-import * as Cruncher from '../../numberCrunchers/index'
 
 const StatHistoryRow = (props) => {
     const { deleteStat, firebase } = useContext(FirebaseContext);

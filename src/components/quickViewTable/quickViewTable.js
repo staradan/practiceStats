@@ -1,8 +1,9 @@
 import React, { useContext } from 'react';
 import PlusMinusBox from './posNegViewBox';
 import { FirebaseContext } from '../../firebase'
-import { faSpinner } from "@fortawesome/free-solid-svg-icons";
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import messages from '../../assets/loadingMessages'
 
 const QuickRecordTable = () => {
     const { players, categories, viewOnlyStats } = useContext(FirebaseContext);
@@ -54,17 +55,13 @@ const QuickRecordTable = () => {
         }
     }
 
-    console.log(sortable);
-
     sortable.sort((a, b) => {
         let firstNum = parseFloat(a[1].successPercent) || 0;
         let secondNum = parseFloat(b[1].successPercent) || 0;
         let name = b[0];
-        console.log(name);
         return (name === 'Overall' ? -1 : firstNum < secondNum ? 1 : -1)
     });
 
-    console.log(sortable);
 
 
 
@@ -81,7 +78,7 @@ const QuickRecordTable = () => {
                     </div>
                     <div>
                         {sortable.length > 0 ? sortable.map((player, num) => (
-                            <div key={num} className="flex items-center w-view">
+                            <div key={num} className={"flex items-center w-view " + (player[0] === 'Overall' ? 'border-gray-600 border-t-2 bg-gray-600' : '')}>
                                 <div className={"w-40 flex-none sticky left-0 flex-none border-gray-600 border-r-2 text-gray-700 text-left px-4 py-4 overflow-hidden flex-no-wrap " + (num % 2 === 0 ? 'bg-gray-200' : 'bg-white')}>
                                     <h1 className="whitespace-no-wrap">
                                         {player[0]}
@@ -90,9 +87,12 @@ const QuickRecordTable = () => {
                                 <PlusMinusBox rowBackgroundColor={(num % 2 === 0 ? 'bg-gray-200' : 'bg-white')} player={player[0]} key="overall" num={num} statName="Overall" />
                                 {categories != null ? categories.map((category, index) => (
                                     <PlusMinusBox rowBackgroundColor={(num % 2 === 0 ? 'bg-gray-200' : 'bg-white')} player={player[0]} key={index} statName={category} />
-                                )) : <div><FontAwesomeIcon icon={faSpinner} size="2x" /><h1>Loading...</h1></div>}
+                                )) : <div><FontAwesomeIcon icon={faSearch} size="2x" /><h1>Loading...</h1></div>}
                             </div>
-                        )) : <div>Loading...</div>}
+                        )) : <div className="text-center p-12">
+                                <FontAwesomeIcon icon={faSearch} size="2x" />
+                                <h1>{messages[Math.floor(Math.random() * messages.length)]}</h1>
+                            </div>}
                     </div>
                 </div>
             )}

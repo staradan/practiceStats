@@ -52,8 +52,6 @@ const Home = (props) => {
         otherDay.setDate(value.getDate() + differenceToFriday);
         let lastDateString = stringifyDate(otherDay);
 
-        console.log(firstDateString, lastDateString);
-
         newGetStatsInPeriod({ startDate: firstDateString, endDate: lastDateString }).then(result => setViewOnlyStats(result.data));
         callStatsInPeriod({ startDate: firstDateString, endDate: lastDateString }).then(result => setStats(result.data));
     }
@@ -71,8 +69,6 @@ const Home = (props) => {
 
         var lastDay = new Date(value.getFullYear(), value.getMonth() + 1, 0);
         let lastDateString = stringifyDate(lastDay);
-
-        console.log(firstDateString, lastDateString);
 
         newGetStatsInPeriod({ startDate: firstDateString, endDate: lastDateString }).then(result => setViewOnlyStats(result.data));
         callStatsInPeriod({ startDate: firstDateString, endDate: lastDateString }).then(result => setStats(result.data));
