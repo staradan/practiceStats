@@ -27,8 +27,12 @@ const Home = (props) => {
         await tomorrow.setDate(tomorrow.getDate() + 1);
         let nextDateString = stringifyDate(tomorrow);
 
-        newGetStatsInPeriod({ startDate: currentDateString, endDate: nextDateString }).then(result => setViewOnlyStats(result.data));
-        callStatsInPeriod({ startDate: currentDateString, endDate: nextDateString }).then(result => { setStats(result.data); });
+        newGetStatsInPeriod({ startDate: currentDateString, endDate: nextDateString }).then(result => {
+            setViewOnlyStats(result.data);
+        });
+        callStatsInPeriod({ startDate: currentDateString, endDate: nextDateString }).then(result => {
+            setStats(result.data);
+        });
     }
 
     /**
@@ -84,10 +88,10 @@ const Home = (props) => {
     useEffect(() => {
         getDayData(dateShown);
         callAllPlayers().then(result => {
-            result.data.map((x, index) => {
+            result.data.players.map((x, index) => {
                 x.ranking = index;
             });
-            setPlayers(result.data)
+            setPlayers(result.data.players)
         });
     }, []);
 

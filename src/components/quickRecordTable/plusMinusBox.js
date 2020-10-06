@@ -9,15 +9,16 @@ const PlusMinusBox = ({ playerName, statName, rowBackgroundColor }) => {
     const { firebase, addStat } = useContext(FirebaseContext);
     const minusColor = (statName === 'Competitive' || statName === 'Diving') ? 'text-orange-400' : 'text-red-500';
 
-    const addNewStat = (playerName, statName, isPositive) => {
+    const addNewStat = async (playerName, statName, isPositive) => {
+        let firebaseTimestamp = firebase.getTimestamp(new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()));
         const stat = {
             statName: statName,
             isPositive: isPositive,
             playerName: playerName,
-            createdAt: firebase.getTimestamp(new Date()),
+            createdAt: firebaseTimestamp,
             statID: Math.random() * 1000,
         }
-        firebase.db.collection('allStats').add(stat)
+        await firebase.db.collection('allStats').add(stat)
             .then(function (docRef) {
                 addStat(stat);
             });

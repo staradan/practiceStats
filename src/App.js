@@ -19,15 +19,14 @@ const App = function () {
   const [dateShown, setDate] = useState(globalDate);
   const [dateRange, setDateRange] = useState(1);
 
-  //firebase database calls that get passed around
-  const callAllPlayers = globalFirebase.functions.httpsCallable('callAllPlayers');
-  const addStatToDatabase = globalFirebase.functions.httpsCallable('addStatToDatabase');
-  const callStatsInPeriod = globalFirebase.functions.httpsCallable('callStatsInPeriod');
-  const newGetStatsInPeriod = globalFirebase.functions.httpsCallable('newGetStatsInPeriod');
+  const callAllPlayers = globalFirebase.functions.httpsCallable('getPlayers');
+  const callStatsInPeriod = globalFirebase.functions.httpsCallable('getStatListInPeriod');
+  const newGetStatsInPeriod = globalFirebase.functions.httpsCallable('getStatsInPeriod');
 
   return (
     <FirebaseContext.Provider value={{
       school: 'Nebraska',
+      globalDate: globalDate,
       categories: [
         'Throwing',
         'Fielding',
@@ -44,7 +43,6 @@ const App = function () {
       setStats,
       addStat,
       deleteStat,
-      addStatToDatabase,
       callStatsInPeriod,
       players,
       setPlayers,

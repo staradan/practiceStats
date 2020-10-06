@@ -10,22 +10,17 @@ const QuickRecordTable = () => {
 
     // useEffect(() => {
 
-    //     console.log('players', players);
-
     //     players.forEach(playerName => {
     //         setStatsObj({
     //             ...statsObj,
     //             'hey': 'hey',
     //         });
-    //         console.log('here');
 
     //         // statsObj[playerName] = {
     //         //     positive: [],
     //         //     negative: [],
     //         // };
     //     });
-
-    //     console.log(statsObj);
 
 
     // }, []);
