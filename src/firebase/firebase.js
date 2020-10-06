@@ -20,8 +20,10 @@ class Firebase {
     this.analytics = firebase.analytics();
     this.functions = firebase.functions();
   }
-  getTimestamp(date) {
-    return firebase.firestore.Timestamp.fromDate(date);
+  getTimestamp() {
+    // current time adjusted by timezone
+    let universalNow = new Date(((new Date()).getTime()) - ((new Date()).getTimezoneOffset()*60*1000));
+    return firebase.firestore.Timestamp.fromDate(universalNow);
   }
 }
 
