@@ -10,7 +10,7 @@ const PlusMinusBox = ({ playerName, statName, rowBackgroundColor }) => {
     const minusColor = (statName === 'Competitive' || statName === 'Diving') ? 'text-orange-400' : 'text-red-500';
 
     const addNewStat = async (playerName, statName, isPositive) => {
-        let firebaseTimestamp = firebase.getTimestamp(new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()));
+        let firebaseTimestamp = firebase.getTimestamp();
         const stat = {
             statName: statName,
             isPositive: isPositive,
