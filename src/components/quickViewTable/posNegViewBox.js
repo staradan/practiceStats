@@ -91,7 +91,7 @@ const PlusMinusBox = ({ player, statName, rowBackgroundColor, num }) => {
                 )}
             </FirebaseContext.Consumer>
         );
-    }
+    } 
 }
 
 export default PlusMinusBox;
