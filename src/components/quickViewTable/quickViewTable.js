@@ -6,43 +6,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import messages from '../../assets/loadingMessages'
 
 const QuickRecordTable = () => {
-    const { players, categories, viewOnlyStats } = useContext(FirebaseContext);
-
-    // useEffect(() => {
-
-    //     players.forEach(playerName => {
-    //         setStatsObj({
-    //             ...statsObj,
-    //             'hey': 'hey',
-    //         });
-
-    //         // statsObj[playerName] = {
-    //         //     positive: [],
-    //         //     negative: [],
-    //         // };
-    //     });
-
-
-    // }, []);
-
-    // //break the stats up into player arrays we can work with
-    // //calculate team totals and player arrays
-    // stats.forEach(stat => {
-    //     if (stat.isPositive) {
-    //         statsObj.allPositive.push(stat);
-    //         statsObj[stat.playerName].positive.push(stat);
-    //     } else {
-    //         statsObj.allNegative.push(stat);
-    //         statsObj[stat.playerName].negative.push(stat);
-    //     }
-    // });
-
-    // const [form, setState] = useState({
-    //     username: '',
-    //     password: ''
-    //   });
+    const { categories, stats, viewOnlyStats } = useContext(FirebaseContext);
 
     var sortable = [];
+
+    console.log('list', stats);
 
     if (viewOnlyStats) {
         for (var player in viewOnlyStats) {
@@ -50,11 +18,15 @@ const QuickRecordTable = () => {
         }
     }
 
+    //sort by percentages and then break ties by counting number of 
     sortable.sort((a, b) => {
-        let firstNum = parseFloat(a[1].successPercent) || 0;
-        let secondNum = parseFloat(b[1].successPercent) || 0;
-        let name = b[0];
-        return (name === 'Overall' ? -1 : firstNum < secondNum ? 1 : -1)
+        let firstPerc = parseFloat(a[1].successPercent) || 0;
+        let secondPerc = parseFloat(b[1].successPercent) || 0;
+
+        let firstPosLength = parseFloat(a[1].positive.length) || 0;
+        let secondPosLength = parseFloat(b[1].positive.length) || 0;
+
+        return (b[0] === 'Overall' ? -1 : secondPerc - firstPerc || secondPosLength - firstPosLength)
     });
 
 

@@ -10,8 +10,47 @@ const stringifyDate = (date) => {
 }
 
 
+const makeCSV = (data) => {
+    let csv;
+    // Loop the array of objects
+    for (let row = 0; row < data.length; row++) {
+        let keysAmount = Object.keys(data[row]).length
+        let keysCounter = 0
+
+        // If this is the first row, generate the headings
+        if (row === 0) {
+
+            // Loop each property of the object
+            for (let key in data[row]) {
+                console.log(key);
+
+                // This is to not add a comma at the last cell
+                // The '\r\n' adds a new line
+                if (key) {
+                    csv += key + (keysCounter + 1 < keysAmount ? ',' : '\r\n')
+                    keysCounter++
+                }
+            }
+        } else {
+            for (let key in data[row]) {
+                if (typeof data[row][key] === 'object') {
+                    csv += data[row][key]._seconds + (keysCounter + 1 < keysAmount ? ',' : '\r\n')
+                } else {
+                    csv += data[row][key] + (keysCounter + 1 < keysAmount ? ',' : '\r\n')
+                }
+                keysCounter++
+            }
+        }
+
+        keysCounter = 0
+    }
+
+    return csv;
+}
+
+
 const Home = (props) => {
-    const { setStats, setViewOnlyStats, newGetStatsInPeriod, callStatsInPeriod, dateShown, setDate, callAllPlayers, setPlayers, dateRange, setDateRange } = useContext(FirebaseContext);
+    const { stats, setStats, setViewOnlyStats, newGetStatsInPeriod, callStatsInPeriod, dateShown, setDate, callAllPlayers, setPlayers, dateRange, setDateRange } = useContext(FirebaseContext);
 
     /**
      * 
@@ -31,7 +70,9 @@ const Home = (props) => {
             setViewOnlyStats(result.data);
         });
         callStatsInPeriod({ startDate: currentDateString, endDate: nextDateString }).then(result => {
+            //this list of stats is for exporting maybe...
             setStats(result.data);
+            console.log('csv', makeCSV(result.data));
         });
     }
 
@@ -79,22 +120,6 @@ const Home = (props) => {
     }
 
 
-
-    /**
-     * When home loads, load the current day's stats and the players
-     * TODO: the stats and players won't load if you don't view this page first and go straight to the taking stats page
-     * NOTE: the empty array passed in at the end I think makes sure it only runs once. 
-     */
-    useEffect(() => {
-        getDayData(dateShown);
-        callAllPlayers().then(result => {
-            result.data.players.map((x, index) => {
-                x.ranking = index;
-            });
-            setPlayers(result.data.players)
-        });
-    }, []);
-
     /**
      * 
      * @param {Date} value, the new date that is selected
@@ -112,6 +137,23 @@ const Home = (props) => {
             getMonthData(value);
         }
     }
+
+
+
+    /**
+     * When home loads, load the current day's stats and the players
+     * TODO: the stats and players won't load if you don't view this page first and go straight to the taking stats page
+     * NOTE: the empty array passed in at the end I think makes sure it only runs once. 
+     */
+    useEffect(() => {
+        updateDate(dateShown);
+        callAllPlayers().then(result => {
+            result.data.players.map((x, index) => {
+                x.ranking = index;
+            });
+            setPlayers(result.data.players)
+        });
+    }, []);
 
     return (
         <FirebaseContext.Consumer>
@@ -148,6 +190,15 @@ const Home = (props) => {
                                 }} className={"shadow mx-4 font-bold py-2 px-4 rounded " + (dateRange === 31 ? 'text-red-600' : 'text-black')}>
                                     Month
                                 </button>
+                            </div>
+                            <div className="mb-2">
+                                <a
+                                    className="text-blue-600"
+                                    href={'data:text/plain;charset=utf-8,' + encodeURIComponent(makeCSV(stats))}
+                                    download="UNLTrainingStats.csv"
+                                >
+                                    Download to Excel
+                            </a>
                             </div>
                             <QuickViewTable />
                         </div>
