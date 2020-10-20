@@ -122,6 +122,25 @@ const Home = (props) => {
 
     /**
      * 
+     * @param {Date} value, the selected date
+     * 
+     * TODO - this has a serious bug lol
+     */
+    const getAllTimeData = (value) => {
+        setViewOnlyStats({});
+        var firstDay = new Date(2016, 11, 17, 0, 0, 0, 0);
+        let firstDateString = stringifyDate(firstDay);
+
+        var lastDay = new Date(2030, 11, 17, 0, 0, 0, 0);
+        let lastDateString = stringifyDate(lastDay);
+
+        newGetStatsInPeriod({ startDate: firstDateString, endDate: lastDateString }).then(result => setViewOnlyStats(result.data));
+        callStatsInPeriod({ startDate: firstDateString, endDate: lastDateString }).then(result => setStats(result.data));
+    }
+
+
+    /**
+     * 
      * @param {Date} value, the new date that is selected
      * 
      * This runs when the user updates the date with the calendar 
@@ -135,6 +154,8 @@ const Home = (props) => {
             getWeekData(value);
         } else if (dateRange === 31) {
             getMonthData(value);
+        } else if (dateRange === 0) {
+            getAllTimeData(value);
         }
     }
 
@@ -189,6 +210,12 @@ const Home = (props) => {
                                     getMonthData(dateShown);
                                 }} className={"shadow mx-4 font-bold py-2 px-4 rounded " + (dateRange === 31 ? 'text-red-600' : 'text-black')}>
                                     Month
+                                </button>
+                                <button onClick={() => {
+                                    setDateRange(0);
+                                    getAllTimeData(dateShown);
+                                }} className={"shadow mx-4 font-bold py-2 px-4 rounded " + (dateRange === 31 ? 'text-red-600' : 'text-black')}>
+                                    All-Time
                                 </button>
                             </div>
                             <div className="mb-2">
