@@ -214,7 +214,7 @@ const Home = (props) => {
                                 <button onClick={() => {
                                     setDateRange(0);
                                     getAllTimeData(dateShown);
-                                }} className={"shadow mx-4 font-bold py-2 px-4 rounded " + (dateRange === 31 ? 'text-red-600' : 'text-black')}>
+                                }} className={"shadow mx-4 font-bold py-2 px-4 rounded " + (dateRange === 0 ? 'text-red-600' : 'text-black')}>
                                     All-Time
                                 </button>
                             </div>
