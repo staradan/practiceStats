@@ -9,8 +9,69 @@ const stringifyDate = (date) => {
     return date.getFullYear() + ',' + (date.getMonth() + 1) + ',' + date.getDate()
 }
 
+// TODO: This could be split into two functions? Ideally, the heavy lifting could be done on the backend
+const makePlayerListCSV = (data, categories) => {
+    if (data === undefined || data.length < 1)
+        return undefined;
 
-const makeCSV = (data) => {
+    let playerData = {};
+    const OVERALL = 'Overall'; const CATEGORY_KEY='statName'; const POS = '_pos'; const NEG = '_neg'; const PCT = '_pct';
+    const EXCLUDE_FROM_POS = ['Ball On Ground']
+    const EXCLUDE_FROM_PCT = EXCLUDE_FROM_POS;
+    const EXCLUDE_FROM_NEG_TOTAL = ['Competitive']
+    categories.unshift(OVERALL);
+
+    // iterate through each row and aggregate positive/negative plays by player name
+    for (let row = 0; row < data.length; row++) {
+        let playerName = data[row].playerName;
+        // if this is the first time this name appears, initilize it in the data object
+        if (playerData[playerName] === undefined) {
+            playerData[playerName] = {name : playerName}
+            for (let i = 0; i < categories.length; i++) {
+                if (!EXCLUDE_FROM_POS.includes(categories[i]))
+                    playerData[playerName][categories[i] + POS] = 0;
+                playerData[playerName][categories[i] + NEG] = 0;
+                if (!EXCLUDE_FROM_PCT.includes(categories[i]))
+                    playerData[playerName][categories[i] + PCT] = undefined;
+            }
+        }
+        // increment the appropriate positive/negative and overall values
+        if (data[row].isPositive) {
+            playerData[playerName][data[row][CATEGORY_KEY] + POS]++; 
+            playerData[playerName][OVERALL + POS]++;
+        } else {
+            playerData[playerName][data[row][CATEGORY_KEY] + NEG]++;
+            if (!EXCLUDE_FROM_NEG_TOTAL.includes(data[row][CATEGORY_KEY]))
+                playerData[playerName][OVERALL + NEG]++;
+        }
+    }
+
+    // calculate and assign percentages
+    for (let player in playerData) { 
+        for (let i = 0; i < categories.length; i++) {
+            if (!EXCLUDE_FROM_PCT.includes(categories[i]))
+                playerData[player][categories[i] + PCT] = 
+                    playerData[player][categories[i] + POS] / 
+                        (playerData[player][categories[i] + POS] + 
+                        playerData[player][categories[i] + NEG]);
+        }
+    }
+
+    // translate the new player data object into a csv string
+    let headers = Object.keys(playerData[Object.keys(playerData)[0]]);
+    let result = headers.join(",") + "\n";
+    for (let player in playerData) {
+        for (let property in playerData[player]) {
+            result += playerData[player][property] + ",";
+        }
+        result += "\n";
+    }
+
+    return result;
+}
+
+
+const makeStatListCSV = (data) => {
     let csv;
     // Loop the array of objects
     for (let row = 0; row < data.length; row++) {
@@ -22,7 +83,6 @@ const makeCSV = (data) => {
 
             // Loop each property of the object
             for (let key in data[row]) {
-                console.log(key);
 
                 // This is to not add a comma at the last cell
                 // The '\r\n' adds a new line
@@ -50,7 +110,7 @@ const makeCSV = (data) => {
 
 
 const Home = (props) => {
-    const { stats, setStats, setViewOnlyStats, newGetStatsInPeriod, callStatsInPeriod, dateShown, setDate, callAllPlayers, setPlayers, dateRange, setDateRange } = useContext(FirebaseContext);
+    const { stats, setStats, setViewOnlyStats, newGetStatsInPeriod, callStatsInPeriod, dateShown, setDate, callAllPlayers, setPlayers, dateRange, setDateRange, categories } = useContext(FirebaseContext);
 
     /**
      * 
@@ -72,7 +132,6 @@ const Home = (props) => {
         callStatsInPeriod({ startDate: currentDateString, endDate: nextDateString }).then(result => {
             //this list of stats is for exporting maybe...
             setStats(result.data);
-            console.log('csv', makeCSV(result.data));
         });
     }
 
@@ -221,8 +280,8 @@ const Home = (props) => {
                             <div className="mb-2">
                                 <a
                                     className="text-blue-600"
-                                    href={'data:text/plain;charset=utf-8,' + encodeURIComponent(makeCSV(stats))}
-                                    download="UNLTrainingStats.csv"
+                                    href={'data:text/plain;charset=utf-8,' + encodeURIComponent(makePlayerListCSV(stats, categories))}
+                                    download={'VIZN_stats_' + Date.now() + '.csv'}
                                 >
                                     Download to Excel
                             </a>
