@@ -15,7 +15,7 @@ const makePlayerListCSV = (data, categories) => {
         return undefined;
 
     let playerData = {};
-    const OVERALL = 'Overall'; const CATEGORY_KEY='statName'; const POS = '_pos'; const NEG = '_neg'; const PCT = '_pct';
+    const OVERALL = 'Overall'; const CATEGORY_KEY = 'statName'; const POS = '_pos'; const NEG = '_neg'; const PCT = '_pct';
     const EXCLUDE_FROM_POS = ['Ball On Ground']
     const EXCLUDE_FROM_PCT = EXCLUDE_FROM_POS;
     const EXCLUDE_FROM_NEG_TOTAL = ['Competitive']
@@ -26,7 +26,7 @@ const makePlayerListCSV = (data, categories) => {
         let playerName = data[row].playerName;
         // if this is the first time this name appears, initilize it in the data object
         if (playerData[playerName] === undefined) {
-            playerData[playerName] = {name : playerName}
+            playerData[playerName] = { name: playerName }
             for (let i = 0; i < categories.length; i++) {
                 if (!EXCLUDE_FROM_POS.includes(categories[i]))
                     playerData[playerName][categories[i] + POS] = 0;
@@ -37,7 +37,7 @@ const makePlayerListCSV = (data, categories) => {
         }
         // increment the appropriate positive/negative and overall values
         if (data[row].isPositive) {
-            playerData[playerName][data[row][CATEGORY_KEY] + POS]++; 
+            playerData[playerName][data[row][CATEGORY_KEY] + POS]++;
             playerData[playerName][OVERALL + POS]++;
         } else {
             playerData[playerName][data[row][CATEGORY_KEY] + NEG]++;
@@ -47,12 +47,12 @@ const makePlayerListCSV = (data, categories) => {
     }
 
     // calculate and assign percentages
-    for (let player in playerData) { 
+    for (let player in playerData) {
         for (let i = 0; i < categories.length; i++) {
             if (!EXCLUDE_FROM_PCT.includes(categories[i]))
-                playerData[player][categories[i] + PCT] = 
-                    playerData[player][categories[i] + POS] / 
-                        (playerData[player][categories[i] + POS] + 
+                playerData[player][categories[i] + PCT] =
+                    playerData[player][categories[i] + POS] /
+                    (playerData[player][categories[i] + POS] +
                         playerData[player][categories[i] + NEG]);
         }
     }
@@ -178,6 +178,45 @@ const Home = (props) => {
         callStatsInPeriod({ startDate: firstDateString, endDate: lastDateString }).then(result => setStats(result.data));
     }
 
+    /**
+ * 
+ * @param {Date} value, the selected date
+ * 
+ * TODO - this has a serious bug lol
+ */
+    const getSemesterData = (value) => {
+        //fall semester is from July 1 to December 31
+        //spring semester is from Jan. 1 to June 30
+        setViewOnlyStats({});
+
+        let firstDay;
+        let firstDateString;
+        let lastDateString;
+        let lastDay;
+
+        //check what semester it is
+        if (value.getMonth() <= 5) {
+            //spring semester Jan-June (inclusive)
+            firstDay = new Date(value.getFullYear(), 0, 1, 0, 0, 0, 0);
+            firstDateString = stringifyDate(firstDay);
+
+            lastDay = new Date(value.getFullYear(), 5, 30, 0, 0, 0, 0);
+            lastDateString = stringifyDate(lastDay);
+
+        } else {
+            //fall semester July-Dec (inclusive)
+            firstDay = new Date(value.getFullYear(), 6, 1, 0, 0, 0, 0);
+            firstDateString = stringifyDate(firstDay);
+
+            lastDay = new Date(value.getFullYear(), 11, 31, 0, 0, 0, 0);
+            lastDateString = stringifyDate(lastDay);
+
+        }
+
+        newGetStatsInPeriod({ startDate: firstDateString, endDate: lastDateString }).then(result => setViewOnlyStats(result.data));
+        callStatsInPeriod({ startDate: firstDateString, endDate: lastDateString }).then(result => setStats(result.data));
+    }
+
 
     /**
      * 
@@ -213,7 +252,10 @@ const Home = (props) => {
             getWeekData(value);
         } else if (dateRange === 31) {
             getMonthData(value);
-        } else if (dateRange === 0) {
+        } else if (dateRange === 2) {
+            getSemesterData(value);
+        }
+        else if (dateRange === 0) {
             getAllTimeData(value);
         }
     }
@@ -231,7 +273,9 @@ const Home = (props) => {
             result.data.players.map((x, index) => {
                 x.ranking = index;
             });
-            setPlayers(result.data.players)
+
+            //console.log('or', result.data.players, 'new', maybeThisWillWork)
+            setPlayers(result.data.players);
         });
     }, []);
 
@@ -269,6 +313,12 @@ const Home = (props) => {
                                     getMonthData(dateShown);
                                 }} className={"shadow mx-4 font-bold py-2 px-4 rounded " + (dateRange === 31 ? 'text-red-600' : 'text-black')}>
                                     Month
+                                </button>
+                                <button onClick={() => {
+                                    setDateRange(2);
+                                    getSemesterData(dateShown);
+                                }} className={"shadow mx-4 font-bold py-2 px-4 rounded " + (dateRange === 2 ? 'text-red-600' : 'text-black')}>
+                                    Current Semester
                                 </button>
                                 <button onClick={() => {
                                     setDateRange(0);

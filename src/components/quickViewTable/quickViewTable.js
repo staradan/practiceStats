@@ -14,7 +14,9 @@ const QuickRecordTable = () => {
 
     if (viewOnlyStats) {
         for (var player in viewOnlyStats) {
-            sortable.push([player, viewOnlyStats[player]]);
+            if (player !== 'Luke Boynton') {
+                sortable.push([player, viewOnlyStats[player]]);
+            }
         }
     }
 
