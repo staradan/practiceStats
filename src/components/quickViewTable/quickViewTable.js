@@ -10,7 +10,7 @@ const QuickRecordTable = () => {
 
     var sortable = [];
 
-    console.log('list', stats);
+    console.log('list', stats, viewOnlyStats);
 
     if (viewOnlyStats) {
         for (var player in viewOnlyStats) {

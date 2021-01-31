@@ -152,10 +152,11 @@ const Home = (props) => {
         let firstDateString = stringifyDate(tempDay);
 
         //calculate the second day based on where we are
-        let differenceToFriday = 6 - value.getDay();
+        let differenceToFriday = 7 - value.getDay();
         otherDay.setDate(value.getDate() + differenceToFriday);
         let lastDateString = stringifyDate(otherDay);
 
+        console.log('poopppp!', firstDateString, lastDateString)
         newGetStatsInPeriod({ startDate: firstDateString, endDate: lastDateString }).then(result => setViewOnlyStats(result.data));
         callStatsInPeriod({ startDate: firstDateString, endDate: lastDateString }).then(result => setStats(result.data));
     }
