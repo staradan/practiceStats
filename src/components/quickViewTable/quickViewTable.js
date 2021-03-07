@@ -39,16 +39,16 @@ const QuickRecordTable = () => {
             {(context) => (
                 <div className="rounded-sm border border-gray-400 shadow relative w-full overflow-auto bg-gray-300">
                     <div className="relative flex items-center w-view">
-                        <div className="w-48 sticky left-0 flex-none font-semibold text-sm text-gray-700 bg-gray-400 border-gray-600 border-r-2 text-left px-4 big-width">Name</div>
-                        <div className="w-48 whitespace-no-wrap flex-none font-semibold text-center text-sm text-gray-700 bg-gray-400 px-2 overflow-hidden">Overall</div>
+                        <div className="w-40 sticky left-0 flex-none font-semibold text-sm text-gray-700 bg-gray-400 border-gray-600 border-r-2 text-left px-4 big-width">Name</div>
+                        {/* <div className="w-48 whitespace-no-wrap flex-none font-semibold text-center text-sm text-gray-700 bg-gray-400 px-2 overflow-hidden">Overall</div> */}
                         {categories != null ? categories.map((statName, index) => (
-                            <div key={index} className="w-48 whitespace-no-wrap flex-none font-semibold text-center text-sm text-gray-700 bg-gray-400 px-2 overflow-hidden">{statName}</div>
+                            <div key={index} className="w-40 whitespace-no-wrap flex-none font-semibold text-center text-sm text-gray-700 bg-gray-400 px-2 overflow-hidden">{statName}</div>
                         )) : <h1>Loading...</h1>}
                     </div>
                     <div>
                         {sortable.length > 0 ? sortable.map((player, num) => (
                             <div key={num} className={"flex items-center w-view " + (player[0] === 'Overall' ? 'border-gray-600 border-t-2 bg-gray-600' : '')}>
-                                <div className={"w-48 flex-none sticky left-0 flex-none border-gray-600 border-r-2 text-gray-700 text-left px-4 py-4 overflow-hidden flex-no-wrap " + (num % 2 === 0 ? 'bg-gray-200' : 'bg-white')}>
+                                <div className={"w-40 flex-none sticky left-0 flex-none border-gray-600 border-r-2 text-gray-700 text-left px-4 overflow-hidden flex-no-wrap " + (num % 2 === 0 ? 'bg-gray-200' : 'bg-white')}>
                                     <h1 className="whitespace-no-wrap">
                                         {player[0]}
                                     </h1>
