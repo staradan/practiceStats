@@ -53,7 +53,7 @@ const QuickRecordTable = () => {
                                         {player[0]}
                                     </h1>
                                 </div>
-                                <PlusMinusBox rowBackgroundColor={(num % 2 === 0 ? 'bg-gray-200' : 'bg-white')} player={player[0]} key="overall" num={num} statName="Overall" />
+                                {/* <PlusMinusBox rowBackgroundColor={(num % 2 === 0 ? 'bg-gray-200' : 'bg-white')} player={player[0]} key="overall" num={num} statName="Overall" /> */}
                                 {categories != null ? categories.map((category, index) => (
                                     <PlusMinusBox rowBackgroundColor={(num % 2 === 0 ? 'bg-gray-200' : 'bg-white')} player={player[0]} key={index} statName={category} />
                                 )) : <div><FontAwesomeIcon icon={faSearch} size="2x" /><h1>Loading...</h1></div>}
