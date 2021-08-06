@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 function TakeStats() {
     const [password, setPassword] = useState('');
 
-    if (password === '6969') {
+    if (password === '8675309') {
         return (
             <div className="mt-4 px-4">
                 <div className="max-h-screen mb-8">
